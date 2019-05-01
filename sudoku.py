@@ -120,7 +120,8 @@ class Sudoku:
     def ismatrixsolved(self):
         return self.ismatrixcomplete and self.__changes == 0
 
-    def setmatrixvalue(self, i, j, value, overwrite=False, startfromblockcoordinates=False):
+    def setmatrixvalue(self, i, j, value, overwrite=False, startfromblockcoordinates=False,
+                       insert_check_overwrite=None):
         if startfromblockcoordinates:
             blockcoordinates = self.blocktocellcoordinates(i, j)
             arg_block_i = i
@@ -128,7 +129,12 @@ class Sudoku:
             i = blockcoordinates[0]
             j = blockcoordinates[1]
 
-        if not self.matrixcontainsvalue(i, j, value):
+        if insert_check_overwrite is None:
+            check = not self.matrixcontainsvalue(i, j, value)
+        else:
+            check = insert_check_overwrite
+
+        if check:
             zeroupdated = False
             if self.rows[i][j] == 0 or overwrite:
                 if self.rows[i][j] == 0:
@@ -155,6 +161,8 @@ class Sudoku:
 
             if zeroupdated:
                 self.__changes += 1
+
+            return zeroupdated
 
     def matrixcontainsvalue(self, i, j, value):
         row_contains = value in self.rows[i]
@@ -189,8 +197,7 @@ class Sudoku:
     def completesingleemptycellssections(self):
         self.__changes = 0  # reset change tracking
         # process rows
-        i = 0
-        for row in self.rows:
+        for i, row in enumerate(self.rows):
             if row.count(0) == 1:
                 j = row.index(0)
                 diff = list(set(row).symmetric_difference(Sudoku.base_number_set_with_zero))
@@ -201,10 +208,8 @@ class Sudoku:
                             [str(v) for v in row]) + "], just expected one.")
                 if not self.matrixcontainsvalue(i, j, value):  # value not in row and value not in self.columns[j]:
                     self.setmatrixvalue(i, j, value)
-            i += 1
         # process columns
-        j = 0
-        for col in self.columns:
+        for j, col in enumerate(self.columns):
             if col.count(0) == 1:
                 i = col.index(0)
                 diff = list(set(col).symmetric_difference(Sudoku.base_number_set_with_zero))
@@ -214,10 +219,8 @@ class Sudoku:
                         j) + ") = [" + ','.join([str(v) for v in col]) + "], just expected one.")
                 if not self.matrixcontainsvalue(i, j, value):  # value not in col and value not in self.rows[i]:
                     self.setmatrixvalue(i, j, value)
-            j += 1
         # process.blocks
-        i = 0
-        for block in self.blocks:
+        for i, block in enumerate(self.blocks):
             if block.count(0) == 1:
                 j = block.index(0)
                 diff = list(set(block).symmetric_difference(Sudoku.base_number_set_with_zero))
@@ -228,7 +231,6 @@ class Sudoku:
                 cellcoordinates = self.blocktocellcoordinates(i, j)
                 if not self.matrixcontainsvalue(cellcoordinates[0], cellcoordinates[1], value):  # value not in block:
                     self.setmatrixvalue(cellcoordinates[0], cellcoordinates[1], value)
-            i += 1
 
     def completedoubleemptycellssections(self):
         self.__changes = 0  # reset change tracking
@@ -271,17 +273,19 @@ class Sudoku:
                     self.setmatrixvalue(i_b, j, a)
                     self.setmatrixvalue(i_a, j, b)
 
-    def completeblockemptycells(self):
+    def completehorizontalblocksemptycells(self):
         self.__changes = 0  # reset change tracking
         for value in range(1, Sudoku.matrix_height + 1):
-            i = 0
             # loop through block groups
-            for b in range(0, Sudoku.matrix_height, Sudoku.block_height):
+            for block_rowid in range(0, Sudoku.matrix_height, Sudoku.block_height):
+                # self.__pocesshorizontalblockrow(block_rowid, value)
+                i = 0
                 selected_block = None
                 index_value_adjacentblocks = []
-                block_id = list(range(b, b + Sudoku.block_height))
-            # look for block without value in set of blocks in uberrow
-                for i in range(b, b + Sudoku.block_height):
+                block_id = list(range(block_rowid, block_rowid + Sudoku.block_height))
+                # look for block without value in set of blocks in uberrow
+                block_range = block_id[:]
+                for i in block_range:
                     block = self.blocks[i]
                     if value in block:
                         block_id.remove(i)
@@ -289,23 +293,40 @@ class Sudoku:
                 if len(block_id) == 1:
                     i = block_id[0]
                     selected_block = self.blocks[i]
-            # find empty cells in block
+                # find empty cells in block
                 if selected_block is not None:
-                    emptycells = self.__getblockemptycells(selected_block, index_value_adjacentblocks)
+                    emptycells = self.__gethorizontalblocksemptycells(selected_block, i, index_value_adjacentblocks,
+                                                                      value)
                     for j in emptycells:
                         self.setmatrixvalue(i, j, value, startfromblockcoordinates=True)
 
-    def completeverticalblockemptycells(self):
+    def completeverticalblocksemptycells(self):
         self.__changes = 0  # reset change tracking
-        # Analyze blocks left, center, right
-        for index in range(Sudoku.block_height):
-            for i in range(self.matrix_height):
-                value = i + 1
-                empty_cells = self.__getverticalblockemptycells(index, value)
-                if empty_cells is not None and len(empty_cells) > 0:
-                    for row, col in empty_cells.items():
-                        if not self.matrixcontainsvalue(row, col, value):
-                            self.setmatrixvalue(row, col, value)
+        for value in range(1, Sudoku.matrix_height + 1):
+            # loop through block groups
+            for block_rowid in range(Sudoku.block_height):
+                # self.__processverticalblockrow(block_rowid, value)
+                i = 0
+                selected_block = None
+                index_value_adjacentblocks = []
+                block_id = list(range(block_rowid, Sudoku.matrix_height, Sudoku.block_height))
+                # look for block without value in set of blocks in uberrow
+                block_range = block_id[:]
+                for i in block_range:
+                    block = self.blocks[i]
+                    if value in block:
+                        block_id.remove(i)
+                        index_value_adjacentblocks.append(block.index(value))
+                if len(block_id) == 1:
+                    i = block_id[0]
+                    selected_block = self.blocks[i]
+                # find empty cells in block
+                if selected_block is not None:
+                    emptycells = self.__getverticalblocksemptycells(selected_block, i, index_value_adjacentblocks, value)
+                    for j in emptycells:
+                        updated = self.setmatrixvalue(i, j, value, startfromblockcoordinates=True)
+                        # if updated:
+                        #     self.__processblockramifications(i, value)
 
     def resetchangetrackingcount(self):
         self.__changes = 0
@@ -319,13 +340,16 @@ class Sudoku:
         adjacents = self.__getdadjacentsectionindices(j)
         if adjacents is not None:
             if i in [0, 1, 2]:
-                if (value in self.columns[adjacents[0]][3:6] and value in self.columns[adjacents[1]][6:9]) or (value in self.columns[adjacents[0]][3:6] and value in self.columns[adjacents[1]][6:9]):
+                if (value in self.columns[adjacents[0]][3:6] and value in self.columns[adjacents[1]][6:9]) or (
+                        value in self.columns[adjacents[0]][3:6] and value in self.columns[adjacents[1]][6:9]):
                     match = True
             elif i in [3, 4, 5]:
-                if (value in self.columns[adjacents[0]][0:3] and value in self.columns[adjacents[1]][6:9]) or (value in self.columns[adjacents[0]][0:3] and value in self.columns[adjacents[1]][6:9]):
+                if (value in self.columns[adjacents[0]][0:3] and value in self.columns[adjacents[1]][6:9]) or (
+                        value in self.columns[adjacents[0]][0:3] and value in self.columns[adjacents[1]][6:9]):
                     match = True
             else:
-                if (value in self.columns[adjacents[0]][0:3] and value in self.columns[adjacents[1]][3:6]) or (value in self.columns[adjacents[0]][0:3] and value in self.columns[adjacents[1]][3:6]):
+                if (value in self.columns[adjacents[0]][0:3] and value in self.columns[adjacents[1]][3:6]) or (
+                        value in self.columns[adjacents[0]][0:3] and value in self.columns[adjacents[1]][3:6]):
                     match = True
 
         return match
@@ -335,13 +359,16 @@ class Sudoku:
         adjacents = self.__getdadjacentsectionindices(i)
         if adjacents is not None:
             if j in [0, 1, 2]:
-                if (value in self.rows[adjacents[0]][3:6] and value in self.rows[adjacents[1]][6:9]) or (value in self.rows[adjacents[0]][3:6] and value in self.rows[adjacents[1]][6:9]):
+                if (value in self.rows[adjacents[0]][3:6] and value in self.rows[adjacents[1]][6:9]) or (
+                        value in self.rows[adjacents[0]][3:6] and value in self.rows[adjacents[1]][6:9]):
                     match = True
             elif j in [3, 4, 5]:
-                if (value in self.rows[adjacents[0]][0:3] and value in self.rows[adjacents[1]][6:9]) or (value in self.rows[adjacents[0]][0:3] and value in self.rows[adjacents[1]][6:9]):
+                if (value in self.rows[adjacents[0]][0:3] and value in self.rows[adjacents[1]][6:9]) or (
+                        value in self.rows[adjacents[0]][0:3] and value in self.rows[adjacents[1]][6:9]):
                     match = True
             else:
-                if (value in self.rows[adjacents[0]][0:3] and value in self.rows[adjacents[1]][3:6]) or (value in self.rows[adjacents[0]][0:3] and value in self.rows[adjacents[1]][3:6]):
+                if (value in self.rows[adjacents[0]][0:3] and value in self.rows[adjacents[1]][3:6]) or (
+                        value in self.rows[adjacents[0]][0:3] and value in self.rows[adjacents[1]][3:6]):
                     match = True
 
         return match
@@ -468,64 +495,6 @@ class Sudoku:
             value = self.rows[cellcoordinates[0]][cellcoordinates[1]]
             self.blocks[blockcoordinates[0]][blockcoordinates[1]] = value
 
-    def __getverticalblockemptycells(self, colindex, value):
-        empty = {}
-        block_cols = set(range(Sudoku.block_height))
-        # first find block column without value
-        selected_block = -1
-        # get three blocks in colindex vertical
-        for blockindex in [colindex, colindex + Sudoku.block_height, colindex + (2 * Sudoku.block_height)]:
-            block = self.blocks[blockindex]
-            if value not in block:
-                selected_block = blockindex
-            else:
-                colshift = self.__getcolumnshift(block.index(value))
-                if colshift in block_cols:
-                    block_cols.remove(colshift)
-        if len(block_cols) > 1:
-            return None  # if value was missing in more than two blocks, skip it
-        elif len(block_cols) == 0 and selected_block == -1:
-            return None  # value found in all blocks so do nothing
-        else:
-            # row without value (block_rows should only have one value, so there is only one shift)
-            selected_col_shift = list(block_cols)[0]  # store so we only look for empty cells in this row
-            selected_col = colindex * Sudoku.block_height + selected_col_shift
-        # then in column without value get empty cells
-        if selected_block != -1:
-            block = self.blocks[selected_block]
-            if value not in block:
-                for cellindex in range(len(block)):
-                    cell = block[cellindex]
-                    colshift = self.__getcolumnshift(cellindex)
-                    rowshift = self.__getrowshift(cellindex)
-                    # if cell is empty, add pair row,col to dictionary
-                    if cell == 0 and colshift == selected_col_shift:
-                        row = self.__getrowshift(selected_block) * Sudoku.block_height + rowshift
-                        # only add cells in same column
-                        if len(empty) == 0 or (len(empty) > 0 and selected_col in empty.values()):
-                            empty[row] = selected_col
-        return empty
-
-    @staticmethod
-    def __getrowshift(index):
-        if index in [0, 1, 2]:
-            shift = 0
-        elif index in [3, 4, 5]:
-            shift = 1
-        else:
-            shift = 2
-        return shift
-
-    @staticmethod
-    def __getcolumnshift(index):
-        if index in [0, 3, 6]:
-            shift = 0
-        elif index in [1, 4, 7]:
-            shift = 1
-        else:
-            shift = 2
-        return shift
-
     @staticmethod
     def __getdadjacentsectionindices(i):
         indexranges = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
@@ -535,27 +504,156 @@ class Sudoku:
                 return irange
         return None
 
-    def __getblockemptycells(self, selected_block, index_value_in_adjacentblocks):
-        selected_blockrow_indices = self.__getblockrowindices(index_value_in_adjacentblocks)
+    def __gethorizontalblocksemptycells(self, selected_block, block_i_index, index_value_in_adjacentblocks, value):
+        selected_blockrow_indices = self.__gettopmiddlebottom_blockrowindices(index_value_in_adjacentblocks)
         result = [idx for idx, value in enumerate(selected_block) if value == 0 and idx in selected_blockrow_indices]
 
+        # if indices are a triad try to reduce them to a pair by checking columns
+        if len(result) == 3:
+            for block_j in result:
+                j = self.blocktocellcoordinates(block_i_index, block_j)[1]
+                if value in self.columns[j]:
+                    result.remove(block_j)
+        # check if indexes are pair and one of columns with indices contains value, then return no indices
+        if len(result) == 2:
+            if self.__belongtosame_rowindexset(result, 2):
+                # results are block indices need to convert them to cell coordinates to check columns list
+                column1 = self.blocktocellcoordinates(block_i_index, result[0])[1]
+                column2 = self.blocktocellcoordinates(block_i_index, result[1])[1]
+                if value not in self.columns[column1] and value not in self.columns[column2]:
+                    result = []
+        return result
+
+    def __getverticalblocksemptycells(self, selected_block, block_i_index, index_value_in_adjacentblocks, value):
+        selected_blockcolumn_indices = self.__getleftcenterright_blockcolumnindices(index_value_in_adjacentblocks)
+        result = [idx for idx, value in enumerate(selected_block) if value == 0 and idx in selected_blockcolumn_indices]
+
+        # if indices are a triad try to reduce them to a pair by checking rows
+        if len(result) == 3:
+            for block_j in result:
+                i = self.blocktocellcoordinates(block_i_index, block_j)[0]
+                if value in self.rows[i]:
+                    result.remove(block_j)
+        # check if indexes are pair and one of row with indices contains value, then return no indices
+        if len(result) == 2:
+            if self.__belongtosame_columnindexset(result, 2):
+                # results are block indices need to convert them to cell coordinates to check rows list
+                row1 = self.blocktocellcoordinates(block_i_index, result[0])[0]
+                row2 = self.blocktocellcoordinates(block_i_index, result[1])[0]
+                if value not in self.rows[row1] and value not in self.rows[row2]:
+                    result = []
         return result
 
     @staticmethod
-    def __getblockrowindices(indices):
+    def __gettopmiddlebottom_blockrowindices(indices):
         result = None
 
-        blockrow_index = [0, 1, 2]
+        blockcolumn_index = [0, 1, 2]
         indexranges = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
 
         for index in indices:
             for i, irange in enumerate(indexranges):
                 if index in irange:
-                    blockrow_index.remove(i)
+                    if i in blockcolumn_index:
+                        blockcolumn_index.remove(i)
+        if len(blockcolumn_index) == 1:
+            result = indexranges[blockcolumn_index[0]]
+
+        return result
+
+    @staticmethod
+    def __getleftcenterright_blockcolumnindices(indices):
+        result = None
+
+        blockrow_index = [0, 1, 2]
+        indexranges = [[0, 3, 6], [1, 4, 7], [2, 5, 8]]
+
+        for index in indices:
+            for i, irange in enumerate(indexranges):
+                if index in irange:
+                    if i in blockrow_index:
+                        blockrow_index.remove(i)
         if len(blockrow_index) == 1:
             result = indexranges[blockrow_index[0]]
 
         return result
+
+    @staticmethod
+    def __belongtosame_rowindexset(indices, tuplelength):
+        indexranges = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
+
+        tuplematch = False
+        for r in indexranges:
+            match_count = 0
+            for i in indices:
+                if i in r:
+                    match_count += 1
+            if match_count == tuplelength:
+                tuplematch = True
+
+        return tuplematch
+
+    @staticmethod
+    def __belongtosame_columnindexset(indices, tuplelength):
+        indexranges = [[0, 3, 6], [1, 4, 7], [2, 5, 8]]
+
+        tuplematch = False
+        for r in indexranges:
+            match_count = 0
+            for i in indices:
+                if i in r:
+                    match_count += 1
+            if match_count == tuplelength:
+                tuplematch = True
+
+        return tuplematch
+
+    def __pocesshorizontalblockrow(self, block_rowid, value):
+        i = 0
+        selected_block = None
+        index_value_adjacentblocks = []
+        block_id = list(range(block_rowid, block_rowid + Sudoku.block_height))
+        # look for block without value in set of blocks in uberrow
+        block_range = block_id[:]
+        for i in block_range:
+            block = self.blocks[i]
+            if value in block:
+                block_id.remove(i)
+                index_value_adjacentblocks.append(block.index(value))
+        if len(block_id) == 1:
+            i = block_id[0]
+            selected_block = self.blocks[i]
+        # find empty cells in block
+        if selected_block is not None:
+            emptycells = self.__gethorizontalblocksemptycells(selected_block, i, index_value_adjacentblocks, value)
+            for j in emptycells:
+                self.setmatrixvalue(i, j, value, startfromblockcoordinates=True)
+
+    def __processverticalblockrow(self, block_rowid, value):
+        i = 0
+        selected_block = None
+        index_value_adjacentblocks = []
+        block_id = list(range(block_rowid, Sudoku.matrix_height, Sudoku.block_height))
+        # look for block without value in set of blocks in uberrow
+        block_range = block_id[:]
+        for i in block_range:
+            block = self.blocks[i]
+            if value in block:
+                block_id.remove(i)
+                index_value_adjacentblocks.append(block.index(value))
+        if len(block_id) == 1:
+            i = block_id[0]
+            selected_block = self.blocks[i]
+        # find empty cells in block
+        if selected_block is not None:
+            emptycells = self.__getverticalblocksemptycells(selected_block, i, index_value_adjacentblocks, value)
+            for j in emptycells:
+                updated = self.setmatrixvalue(i, j, value, startfromblockcoordinates=True)
+                if updated:
+                    self.__processblockramifications(i, value)
+
+    def __processblockramifications(self, block_i, value):
+        self.__pocesshorizontalblockrow(block_i, value)
 
 
 # noinspection SpellCheckingInspection

@@ -2,14 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="77451875-551b-4319-b830-afc1f5bfd3f0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/data/board_sudoku_2.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/test_board_sudoku.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/testutil.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/p096_sudoku.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/board_sudoku_1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/board_sudoku_2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/board_sudoku_2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/test_board_sudoku.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/test_board_sudoku.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sudoku.py" beforeDir="false" afterPath="$PROJECT_DIR$/sudoku.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test_sudoku.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_sudoku.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testutil.py" beforeDir="false" afterPath="$PROJECT_DIR$/testutil.py" afterDir="false" />
     </list>
     <ignored path=".idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,8 +21,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sudoku.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5149">
-              <caret line="273" column="21" selection-start-line="273" selection-start-column="21" selection-end-line="273" selection-end-column="21" />
+            <state relative-caret-position="741">
+              <caret line="233" selection-start-line="233" selection-end-line="233" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -35,8 +33,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/test_board_sudoku.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="15" column="2" selection-start-line="15" selection-start-column="2" selection-end-line="15" selection-end-column="2" />
+            <state relative-caret-position="703">
+              <caret line="37" column="4" selection-start-line="37" selection-start-column="4" selection-end-line="37" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -44,8 +42,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="13" column="12" selection-start-line="13" selection-start-column="12" selection-end-line="13" selection-end-column="12" />
+            <state relative-caret-position="190">
+              <caret line="10" column="21" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -53,8 +51,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test_sudoku.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="632">
-              <caret line="98" column="7" lean-forward="true" selection-start-line="98" selection-start-column="7" selection-end-line="98" selection-end-column="7" />
+            <state relative-caret-position="1729">
+              <caret line="91" selection-start-line="91" selection-end-line="91" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -70,8 +68,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/board_sudoku_2.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
+            <state relative-caret-position="779">
+              <caret line="41" selection-start-line="41" selection-end-line="49" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -79,8 +77,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/testutil.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-12">
-              <caret line="181" lean-forward="true" selection-start-line="181" selection-end-line="181" />
+            <state relative-caret-position="688">
+              <caret line="193" column="41" selection-start-line="193" selection-start-column="41" selection-end-line="193" selection-end-column="41" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
               </folding>
@@ -100,6 +98,8 @@
       <find>self</find>
       <find>@staticmethod</find>
       <find>TestUtil.</find>
+      <find>[</find>
+      <find>],</find>
     </findStrings>
     <replaceStrings>
       <replace>missing_</replace>
@@ -120,12 +120,13 @@
       <list>
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
-        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py" />
-        <option value="$PROJECT_DIR$/sudoku.py" />
         <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/testutil.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py" />
         <option value="$PROJECT_DIR$/test_sudoku.py" />
+        <option value="$PROJECT_DIR$/testutil.py" />
+        <option value="$PROJECT_DIR$/data/board_sudoku_2.txt" />
         <option value="$PROJECT_DIR$/data/test_board_sudoku.txt" />
+        <option value="$PROJECT_DIR$/sudoku.py" />
       </list>
     </option>
   </component>
@@ -140,9 +141,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="55" />
+    <option name="x" value="54" />
     <option name="y" value="23" />
-    <option name="width" value="2505" />
+    <option name="width" value="2506" />
     <option name="height" value="1417" />
   </component>
   <component name="ProjectView">
@@ -201,28 +202,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests for test_sudoku.TestSudoku.test_completeblockemptycells">
-    <configuration name="scratch" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="algorithms" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$APPLICATION_CONFIG_DIR$/scratches" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python tests.Unittests for test_sudoku.TestSudoku.test_completesingleemptycellssections">
     <configuration name="scratch_1" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="algorithms" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -265,7 +245,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for test_sudoku.TestSudoku.test_completeblockemptycells" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for test_sudoku.TestSudoku" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="algorithms" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -275,11 +255,11 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_sudoku.TestSudoku.test_completeblockemptycells&quot;" />
+      <option name="_new_target" value="&quot;test_sudoku.TestSudoku&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Unittests for test_sudoku.TestSudoku.test_setmatrixvalue" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+    <configuration name="Unittests for test_sudoku.TestSudoku.test_completesingleemptycellssections" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="algorithms" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -289,24 +269,38 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_sudoku.TestSudoku.test_setmatrixvalue&quot;" />
+      <option name="_new_target" value="&quot;test_sudoku.TestSudoku.test_completesingleemptycellssections&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for test_sudoku.TestSudoku.test_completeverticalblocksemptycells" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="algorithms" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_sudoku.TestSudoku.test_completeverticalblocksemptycells&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.scratch" />
       <item itemvalue="Python.scratch_1" />
       <item itemvalue="Python.testutil" />
-      <item itemvalue="Python tests.Unittests for test_sudoku.TestSudoku.test_setmatrixvalue" />
-      <item itemvalue="Python tests.Unittests for test_sudoku.TestSudoku.test_completeblockemptycells" />
+      <item itemvalue="Python tests.Unittests for test_sudoku.TestSudoku" />
+      <item itemvalue="Python tests.Unittests for test_sudoku.TestSudoku.test_completeverticalblocksemptycells" />
+      <item itemvalue="Python tests.Unittests for test_sudoku.TestSudoku.test_completesingleemptycellssections" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Unittests for test_sudoku.TestSudoku.test_completeblockemptycells" />
+        <item itemvalue="Python tests.Unittests for test_sudoku.TestSudoku.test_completesingleemptycellssections" />
+        <item itemvalue="Python tests.Unittests for test_sudoku.TestSudoku" />
+        <item itemvalue="Python tests.Unittests for test_sudoku.TestSudoku.test_completeverticalblocksemptycells" />
         <item itemvalue="Python.testutil" />
         <item itemvalue="Python.scratch_1" />
-        <item itemvalue="Python tests.Unittests for test_sudoku.TestSudoku.test_setmatrixvalue" />
-        <item itemvalue="Python.scratch" />
       </list>
     </recent_temporary>
   </component>
@@ -328,53 +322,60 @@
       <option name="project" value="LOCAL" />
       <updated>1555952315169</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="add test utility module, add ability to load boards from text file, improve horizontal block technique">
+      <created>1556411981674</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1556411981674</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_test_sudoku_TestSudoku_test_completedoubleemptycellssections - 2019.04.22 at 18h 02m 27s.xml">
-      <configuration name="Unittests for test_sudoku.TestSudoku.test_completedoubleemptycellssections" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_sudoku_TestSudoku_test_completedoubleemptycellssections - 2019.04.22 at 18h 22m 29s.xml">
-      <configuration name="Unittests for test_sudoku.TestSudoku.test_completedoubleemptycellssections" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_sudoku_TestSudoku_test_completedoubleemptycellssections - 2019.04.22 at 18h 22m 42s.xml">
-      <configuration name="Unittests for test_sudoku.TestSudoku.test_completedoubleemptycellssections" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_sudoku_TestSudoku_test_completedoubleemptycellssections - 2019.04.22 at 18h 24m 39s.xml">
-      <configuration name="Unittests for test_sudoku.TestSudoku.test_completedoubleemptycellssections" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_sudoku_TestSudoku_test_completedoubleemptycellssections - 2019.04.22 at 18h 27m 33s.xml">
-      <configuration name="Unittests for test_sudoku.TestSudoku.test_completedoubleemptycellssections" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_sudoku_TestSudoku_test_completedoubleemptycellssections - 2019.04.22 at 18h 38m 50s.xml">
-      <configuration name="Unittests for test_sudoku.TestSudoku.test_completedoubleemptycellssections" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_sudoku_TestSudoku_test_completedoubleemptycellssections - 2019.04.22 at 18h 50m 52s.xml">
-      <configuration name="Unittests for test_sudoku.TestSudoku.test_completedoubleemptycellssections" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_sudoku_TestSudoku_test_completedoubleemptycellssections - 2019.04.22 at 19h 06m 19s.xml">
-      <configuration name="Unittests for test_sudoku.TestSudoku.test_completedoubleemptycellssections" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_sudoku_TestSudoku - 2019.04.23 at 20h 08m 46s.xml">
+    <history-entry file="Unittests_for_test_sudoku_TestSudoku - 2019.04.30 at 16h 29m 40s.xml">
       <configuration name="Unittests for test_sudoku.TestSudoku" configurationId="tests" />
     </history-entry>
-    <history-entry file="Unittests_for_test_sudoku_TestSudoku_test_setmatrixvalue - 2019.04.27 at 11h 48m 37s.xml">
-      <configuration name="Unittests for test_sudoku.TestSudoku.test_setmatrixvalue" configurationId="tests" />
+    <history-entry file="Unittests_for_test_sudoku_TestSudoku - 2019.04.30 at 16h 29m 46s.xml">
+      <configuration name="Unittests for test_sudoku.TestSudoku" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_sudoku_TestSudoku - 2019.04.30 at 17h 20m 03s.xml">
+      <configuration name="Unittests for test_sudoku.TestSudoku" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_sudoku_TestSudoku - 2019.04.30 at 19h 51m 34s.xml">
+      <configuration name="Unittests for test_sudoku.TestSudoku" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_sudoku_TestSudoku_test_completeverticalblocksemptycells - 2019.05.01 at 17h 24m 04s.xml">
+      <configuration name="Unittests for test_sudoku.TestSudoku.test_completeverticalblocksemptycells" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_sudoku_TestSudoku_test_completeverticalblocksemptycells - 2019.05.01 at 17h 26m 06s.xml">
+      <configuration name="Unittests for test_sudoku.TestSudoku.test_completeverticalblocksemptycells" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_sudoku_TestSudoku_test_completeverticalblocksemptycells - 2019.05.01 at 17h 29m 46s.xml">
+      <configuration name="Unittests for test_sudoku.TestSudoku.test_completeverticalblocksemptycells" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_sudoku_TestSudoku_test_completeverticalblocksemptycells - 2019.05.01 at 17h 32m 43s.xml">
+      <configuration name="Unittests for test_sudoku.TestSudoku.test_completeverticalblocksemptycells" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_sudoku_TestSudoku - 2019.05.01 at 17h 33m 27s.xml">
+      <configuration name="Unittests for test_sudoku.TestSudoku" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_sudoku_TestSudoku_test_completesingleemptycellssections - 2019.05.01 at 17h 41m 46s.xml">
+      <configuration name="Unittests for test_sudoku.TestSudoku.test_completesingleemptycellssections" configurationId="tests" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="55" y="23" width="2505" height="1417" extended-state="0" />
+    <frame x="54" y="23" width="2506" height="1417" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49774775" visible="true" weight="0.0942029" />
-      <window_info id="Structure" order="1" sideWeight="0.5022523" side_tool="true" visible="true" weight="0.0942029" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.7725225" visible="true" weight="0.30100605" />
+      <window_info id="Structure" order="1" sideWeight="0.22747748" side_tool="true" visible="true" weight="0.30100605" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.33506685" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.33433962" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32981133" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.38566038" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="3" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="4" weight="0.4" />
+      <window_info anchor="bottom" id="Debug" order="5" weight="0.41660377" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info active="true" anchor="bottom" id="Version Control" order="7" visible="true" weight="0.32981133" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.33509433" />
@@ -387,7 +388,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Add idea folder to gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add idea folder to gitignore" />
+    <MESSAGE value="add test utility module, add ability to load boards from text file, improve horizontal block technique" />
+    <option name="LAST_COMMIT_MESSAGE" value="add test utility module, add ability to load boards from text file, improve horizontal block technique" />
   </component>
   <component name="WindowStateProjectService">
     <state width="202" height="171" key="Git.Branch.Popup" />
@@ -399,49 +401,62 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/testutil.py</url>
-          <line>194</line>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/sudoku.py</url>
-          <line>274</line>
-          <option name="timeStamp" value="33" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/testutil.py</url>
-          <line>138</line>
-          <option name="timeStamp" value="36" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/sudoku.py</url>
-          <line>293</line>
-          <option name="timeStamp" value="38" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/testutil.py</url>
-          <line>203</line>
-          <option name="timeStamp" value="42" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/testutil.py</url>
-          <line>215</line>
+          <line>211</line>
           <option name="timeStamp" value="43" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/testutil.py</url>
-          <line>161</line>
-          <option name="timeStamp" value="44" />
+          <line>208</line>
+          <option name="timeStamp" value="46" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/sudoku.py</url>
+          <line>648</line>
+          <option name="timeStamp" value="83" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/sudoku.py</url>
+          <line>507</line>
+          <option name="timeStamp" value="86" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/test_sudoku.py</url>
-          <line>102</line>
-          <option name="timeStamp" value="45" />
+          <line>95</line>
+          <option name="timeStamp" value="87" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/test_sudoku.py</url>
+          <line>91</line>
+          <option name="timeStamp" value="93" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="PythonConfigurationType">
+        <watch expression="selected_block" />
+        <watch expression="indices" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="debuggerHistoryManager">
+    <expressions id="setValue">
+      <expression>
+        <expression-string>7</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
     <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>self.tostring()</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>self.tostring(\)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>games[0].tostring()</expression-string>
         <language-id>Python</language-id>
@@ -485,13 +500,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/codecs.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="332" selection-start-line="332" selection-end-line="332" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Library/Caches/PyCharmCE2019.1/python_stubs/397241524/builtins.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="258">
@@ -499,54 +507,61 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sudoku.py">
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/codecs.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5149">
-          <caret line="273" column="21" selection-start-line="273" selection-start-column="21" selection-end-line="273" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="287">
+          <caret line="311" selection-start-line="311" selection-end-line="311" />
         </state>
       </provider>
     </entry>
     <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="13" column="12" selection-start-line="13" selection-start-column="12" selection-end-line="13" selection-end-column="12" />
+        <state relative-caret-position="190">
+          <caret line="10" column="21" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/board_sudoku_2.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="779">
+          <caret line="41" selection-start-line="41" selection-end-line="49" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/test_board_sudoku.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="703">
+          <caret line="37" column="4" selection-start-line="37" selection-start-column="4" selection-end-line="37" selection-end-column="4" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data/board_sudoku_1.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/board_sudoku_2.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/testutil.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-12">
-          <caret line="181" lean-forward="true" selection-start-line="181" selection-end-line="181" />
+        <state relative-caret-position="688">
+          <caret line="193" column="41" selection-start-line="193" selection-start-column="41" selection-end-line="193" selection-end-column="41" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/test_board_sudoku.txt">
+    <entry file="file://$PROJECT_DIR$/sudoku.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="15" column="2" selection-start-line="15" selection-start-column="2" selection-end-line="15" selection-end-column="2" />
+        <state relative-caret-position="741">
+          <caret line="233" selection-start-line="233" selection-end-line="233" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test_sudoku.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="632">
-          <caret line="98" column="7" lean-forward="true" selection-start-line="98" selection-start-column="7" selection-end-line="98" selection-end-column="7" />
+        <state relative-caret-position="1729">
+          <caret line="91" selection-start-line="91" selection-end-line="91" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
           </folding>

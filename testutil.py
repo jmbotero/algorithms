@@ -9,7 +9,7 @@ def get_project_root() -> Path:
     return Path(__file__).parent
 
 
-def puzzle1():
+def __puzzle1():
     p = Sudoku("Lesson 1",
                [[4, 7, 8, 3, 0, 9, 1, 2, 0],
                 [0, 0, 9, 1, 2, 8, 7, 5, 4],
@@ -24,7 +24,7 @@ def puzzle1():
     return p
 
 
-def puzzle2():
+def __puzzle2():
     p = Sudoku("Lesson 2",
                [[2, 0, 0, 0, 7, 0, 9, 4, 0],
                 [0, 3, 0, 6, 0, 2, 8, 0, 0],
@@ -38,7 +38,7 @@ def puzzle2():
     return p
 
 
-def puzzle3():
+def __puzzle3():
     p = Sudoku("Lesson 4",
                [[0, 0, 3, 9, 0, 0, 1, 7, 6],
                 [0, 0, 4, 0, 0, 6, 5, 3, 0],
@@ -52,7 +52,7 @@ def puzzle3():
     return p
 
 
-def puzzle4():
+def __puzzle4():
     p = Sudoku("Lesson H")
     p.createemptyboard()
     p.setmatrixvalue(0, 1, 7, True)
@@ -158,21 +158,21 @@ def loadpuzzlebyname(puzzlename, filename):
 
 
 # noinspection SpellCheckingInspection
-def solve(puzzle):
+def __solve(puzzle):
     loop = 1
     previousloopemptycount = puzzle.emptycellcount
     print(puzzle.tostring())
 
     changes = False
     while not puzzle.ismatrixcomplete:
-        puzzle.completeblockemptycells()
+        puzzle.completehorizontalblocksemptycells()
         changes = changes or puzzle.haschanged
-        # puzzle.completeverticalblockemptycells()
-        # changes = changes or puzzle.haschanged
-        # puzzle.completesingleemptycellssections()
-        # changes = changes or puzzle.haschanged
-        # puzzle.completedoubleemptycellssections()
-        # changes = changes or puzzle.haschanged
+        puzzle.completeverticalblocksemptycells()
+        changes = changes or puzzle.haschanged
+        puzzle.completesingleemptycellssections()
+        changes = changes or puzzle.haschanged
+        puzzle.completedoubleemptycellssections()
+        changes = changes or puzzle.haschanged
 
         if not changes or previousloopemptycount == puzzle.emptycellcount:
             break
@@ -190,27 +190,23 @@ def solve(puzzle):
 
 
 # noinspection SpellCheckingInspection
-def main_singlepuzzle():
-    mypuzzle = loadpuzzlebyname("Lesson 1", "board_sudoku_2.txt")
-    mypuzzle.completeblockemptycells()
-    color = Color.red
-    if mypuzzle.ismatrixcomplete:
-        color = Color.green
-    print(mypuzzle.tostring(f"Solution:", color))
+def __main_singlepuzzle():
+    mypuzzle = loadpuzzlebyname("Lesson H", "board_sudoku_2.txt")
+    __solve(mypuzzle)
 
 
 # noinspection SpellCheckingInspection
-def main():
-    games = [puzzle1(), puzzle2(), puzzle3(), puzzle4()]
+def __main():
+    games = loadpuzzles("board_sudoku_2.txt")  # [__puzzle1(), __puzzle2(), __puzzle3(), __puzzle4()]
     # games = loadpuzzles("board_sudoku_1.txt")
 
     solutions = []
     for game in games:
         solution = SudokuSolution(game.boardname, game.rows, game.columns, game.tostring(""))
-        solve(game)
+        __solve(game)
         solution.logsolution(game.tostring(""), game.ismatrixcomplete)
         solutions.append((game.emptycellcount, solution))
-
+    games = None
 
 if __name__ == "__main__":
-    main_singlepuzzle()
+    __main_singlepuzzle()

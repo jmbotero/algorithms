@@ -1,4 +1,4 @@
-Actual for test block empty cells
+Actual for test horizontal block empty cells
 478309120
 009128754
 251070308
@@ -8,7 +8,7 @@ Actual for test block empty cells
 826090471
 043067009
 500814032
-Expected for test block empty cells
+Expected for test horizontal block empty cells
 478359120
 039128754
 251470398
@@ -18,3 +18,23 @@ Expected for test block empty cells
 826093471
 143267089
 597814632
+Actual for test vertical block empty cells
+082007590
+700851003
+005290078
+000378420
+000000000
+027945000
+910006807
+200709000
+073000950
+Expected for test vertical block empty cells
+082007590
+700851003
+005290078
+000378420
+000000700
+027945000
+910506807
+200709000
+073000950

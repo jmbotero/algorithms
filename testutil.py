@@ -1,7 +1,8 @@
+from pathlib import Path
+
+from sudoku import Color
 from sudoku import Sudoku
 from sudoku import SudokuSolution
-from sudoku import Color
-from pathlib import Path
 
 
 def get_project_root() -> Path:
@@ -161,7 +162,7 @@ def loadpuzzlebyname(puzzlename, filename):
 def __solve(puzzle):
     loop = 1
     previousloopemptycount = puzzle.emptycellcount
-    print(puzzle.tostring())
+    print(puzzle.tostring(), end="")
 
     changes = False
     while not puzzle.ismatrixcomplete:
@@ -186,12 +187,13 @@ def __solve(puzzle):
     if puzzle.ismatrixcomplete:
         color = Color.green
 
-    print(puzzle.tostring(f"Solution ({loop})", color))
+    print(puzzle.tostring(f"Solution ({loop})", color), end="")
+    print(f"Empty cell count = {puzzle.emptycellcount}", end="\n")
 
 
 # noinspection SpellCheckingInspection
 def __main_singlepuzzle():
-    mypuzzle = loadpuzzlebyname("Lesson H", "board_sudoku_2.txt")
+    mypuzzle = loadpuzzlebyname("Lesson 2", "board_sudoku_2.txt")
     __solve(mypuzzle)
 
 
@@ -209,4 +211,4 @@ def __main():
     games = None
 
 if __name__ == "__main__":
-    __main_singlepuzzle()
+    __main()

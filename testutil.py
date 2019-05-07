@@ -170,10 +170,33 @@ def __solve(puzzle):
         changes = changes or puzzle.haschanged
         puzzle.completeverticalblocksemptycells()
         changes = changes or puzzle.haschanged
+        puzzle.completehorizontalblocksemptycells()
+        changes = changes or puzzle.haschanged
+        puzzle.completeverticalblocksemptycells()
+        changes = changes or puzzle.haschanged
+        puzzle.completehorizontalblocksemptycells()
+        changes = changes or puzzle.haschanged
         puzzle.completesingleemptycellssections()
         changes = changes or puzzle.haschanged
         puzzle.completedoubleemptycellssections()
         changes = changes or puzzle.haschanged
+        puzzle.completehorizontalblocksemptycells()
+        changes = changes or puzzle.haschanged
+        puzzle.completesingleemptycellssections()
+        changes = changes or puzzle.haschanged
+        puzzle.completehorizontalblocksemptycells()
+        changes = changes or puzzle.haschanged
+        puzzle.completeverticalblocksemptycells()
+        changes = changes or puzzle.haschanged
+        puzzle.completesingleemptycellssections()
+        changes = changes or puzzle.haschanged
+
+        # puzzle.completesingleemptycellssections()
+        # changes = changes or puzzle.haschanged
+        # puzzle.completedoubleemptycellssections()
+        # changes = changes or puzzle.haschanged
+        # puzzle.completeemptycellswithnotcontainedvalues()
+        # changes = changes or puzzle.haschanged
 
         if not changes or previousloopemptycount == puzzle.emptycellcount:
             break
@@ -193,7 +216,9 @@ def __solve(puzzle):
 
 # noinspection SpellCheckingInspection
 def __main_singlepuzzle():
-    mypuzzle = loadpuzzlebyname("Lesson 2", "board_sudoku_2.txt")
+    mypuzzle = loadpuzzlebyname("Grid 33", "board_sudoku_1.txt")
+
+    # mypuzzle.completeemptycellswithnotcontainedvalues()
     __solve(mypuzzle)
 
 
@@ -211,4 +236,8 @@ def __main():
     games = None
 
 if __name__ == "__main__":
-    __main()
+    x = input("Which test utility (1/2)? ")
+    if x == "1":
+        __main()
+    elif x == "2":
+        __main_singlepuzzle()

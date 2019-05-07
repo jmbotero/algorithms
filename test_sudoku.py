@@ -1,5 +1,4 @@
 from unittest import TestCase
-from sudoku import Sudoku
 
 import testutil
 
@@ -8,78 +7,102 @@ import testutil
 class TestSudoku(TestCase):
 
     def test_completesingleemptycellssections(self):
-        p = Sudoku("One empty cells",
-                   [[4, 7, 8, 3, 5, 9, 1, 2, 6], [6, 3, 9, 1, 2, 8, 7, 5, 4], [2, 5, 1, 4, 7, 6, 3, 9, 8],
-                    [3, 6, 4, 7, 8, 2, 9, 1, 5], [9, 8, 0, 6, 3, 1, 2, 4, 7], [7, 1, 2, 9, 4, 5, 8, 6, 3],
-                    [8, 2, 6, 5, 9, 3, 4, 7, 1], [1, 4, 3, 2, 6, 7, 5, 8, 9], [5, 9, 7, 8, 1, 4, 6, 3, 2]])
-        expectedcellvalue = 5
+        actualboard = testutil.loadpuzzlebyname("Case 1:Actual for test single empty cell fill",
+                                                "test_board_sudoku.txt")
+        expectedboard = testutil.loadpuzzlebyname("Case 1:Expected for test single empty cell fill",
+                                                  "test_board_sudoku.txt")
 
-        p.completesingleemptycellssections()
+        actualboard.completesingleemptycellssections()
 
-        self.assertEqual(expectedcellvalue, p.rows[4][2])
+        self.assertEqual(expectedboard.rows, actualboard.rows, msg="There is  difference at the row level")
+        self.assertEqual(expectedboard.columns, actualboard.columns, msg="There is  difference at the column level")
+        self.assertEqual(expectedboard.blocks, actualboard.blocks, msg="There is  difference at the block level")
+
+        actualboard = testutil.loadpuzzlebyname("Case 2:Actual for test single empty cell fill",
+                                                "test_board_sudoku.txt")
+        expectedboard = testutil.loadpuzzlebyname("Case 2:Expected for test single empty cell fill",
+                                                  "test_board_sudoku.txt")
+
+        actualboard.completesingleemptycellssections()
+
+        self.assertEqual(expectedboard.rows, actualboard.rows, msg="There is  difference at the row level")
+        self.assertEqual(expectedboard.columns, actualboard.columns, msg="There is  difference at the column level")
+        self.assertEqual(expectedboard.blocks, actualboard.blocks, msg="There is  difference at the block level")
 
     def test_completedoubleemptycellssections(self):
-        p = Sudoku("Two empty cells in row",
-                   [[4, 7, 8, 3, 5, 9, 1, 2, 6], [6, 3, 9, 1, 2, 8, 7, 5, 4], [2, 5, 1, 4, 7, 6, 3, 9, 8],
-                    [3, 6, 4, 7, 8, 2, 9, 1, 5], [9, 0, 5, 6, 3, 1, 2, 4, 0], [7, 1, 2, 9, 4, 5, 8, 6, 3],
-                    [8, 2, 6, 5, 9, 3, 4, 7, 1], [1, 4, 3, 2, 6, 7, 5, 8, 9], [5, 9, 7, 8, 1, 4, 6, 3, 2]])
-        expectedcellvalue1 = 8
-        expectedcellvalue2 = 7
+        actualboard = testutil.loadpuzzlebyname("Case 1:Actual for test double empty cell fill",
+                                                "test_board_sudoku.txt")
+        expectedboard = testutil.loadpuzzlebyname("Case 1:Expected for test double empty cell fill",
+                                                  "test_board_sudoku.txt")
 
-        p.completedoubleemptycellssections()
+        actualboard.completedoubleemptycellssections()
 
-        self.assertEqual(expectedcellvalue1, p.rows[4][1])
-        self.assertEqual(expectedcellvalue2, p.rows[4][8])
+        self.assertEqual(expectedboard.rows, actualboard.rows, msg="There is  difference at the row level")
+        self.assertEqual(expectedboard.columns, actualboard.columns, msg="There is  difference at the column level")
+        self.assertEqual(expectedboard.blocks, actualboard.blocks, msg="There is  difference at the block level")
 
-        p = Sudoku("Two empty cells in column",
-                   [[0, 7, 8, 3, 5, 9, 1, 2, 6], [6, 3, 9, 1, 2, 8, 7, 5, 4], [2, 5, 1, 4, 7, 6, 3, 9, 8],
-                    [3, 6, 4, 7, 8, 2, 9, 1, 5], [0, 8, 5, 6, 3, 1, 2, 4, 7], [7, 1, 2, 9, 4, 5, 8, 6, 3],
-                    [8, 2, 6, 5, 9, 3, 4, 7, 1], [1, 4, 3, 2, 6, 7, 5, 8, 9], [5, 9, 7, 8, 1, 4, 6, 3, 2]])
-        expectedcellvalue1 = 4
-        expectedcellvalue2 = 9
+        actualboard = testutil.loadpuzzlebyname("Case 2:Actual for test double empty cell fill",
+                                                "test_board_sudoku.txt")
+        expectedboard = testutil.loadpuzzlebyname("Case 2:Expected for test double empty cell fill",
+                                                  "test_board_sudoku.txt")
 
-        p.completedoubleemptycellssections()
+        actualboard.completedoubleemptycellssections()
 
-        self.assertEqual(expectedcellvalue1, p.columns[0][0])
-        self.assertEqual(expectedcellvalue2, p.columns[0][4])
+        self.assertEqual(expectedboard.rows, actualboard.rows, msg="There is  difference at the row level")
+        self.assertEqual(expectedboard.columns, actualboard.columns, msg="There is  difference at the column level")
+        self.assertEqual(expectedboard.blocks, actualboard.blocks, msg="There is  difference at the block level")
 
     def test_setmatrixvalue(self):
-        actualboard = Sudoku("Test",
-                             [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                              [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                              [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]])
-        expectedboard = Sudoku("Test",
-                               [[0, 0, 0, 0, 0, 0, 0, 0, 8], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                [0, 0, 0, 0, 0, 0, 0, 0, 0], [3, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]])
+        actualboard = testutil.loadpuzzlebyname("Case 1:Actual for test set value", "test_board_sudoku.txt")
+        expectedboard = testutil.loadpuzzlebyname("Case 1:Expected for test set value", "test_board_sudoku.txt")
 
-        actualboard.setmatrixvalue(0, 8, 8)
-        actualboard.setmatrixvalue(7, 0, 3)
+        actualboard.setmatrixvalue(1, 3, 5)
+
+        self.assertEqual(expectedboard.rows, actualboard.rows, msg="There is  difference at the row level")
+        self.assertEqual(expectedboard.columns, actualboard.columns, msg="There is  difference at the column level")
+        self.assertEqual(expectedboard.blocks, actualboard.blocks, msg="There is  difference at the block level")
+
+        actualboard = testutil.loadpuzzlebyname("Case 2:Actual for test set value", "test_board_sudoku.txt")
+        expectedboard = testutil.loadpuzzlebyname("Case 2:Expected for test set value", "test_board_sudoku.txt")
+
+        actualboard.setmatrixvalue(7, 3, 5)
+        actualboard.setmatrixvalue(1, 3, 5)
 
         self.assertEqual(expectedboard.rows, actualboard.rows, msg="There is  difference at the row level")
         self.assertEqual(expectedboard.columns, actualboard.columns, msg="There is  difference at the column level")
         self.assertEqual(expectedboard.blocks, actualboard.blocks, msg="There is  difference at the block level")
 
     def test_get(self):
-        p = Sudoku("Only one cell with value",
-                   [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 4, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]])
+        actualboard = testutil.loadpuzzlebyname("Actual for test get value", "test_board_sudoku.txt")
         expectedvalue = 4
 
-        self.assertEqual(expectedvalue, p.get(4, 2))
+        self.assertEqual(expectedvalue, actualboard.get(4, 2))
 
     def test_contains(self):
-        p = Sudoku("Same value for intersecting row, column, and block",
-                   [[4, 0, 0, 0, 0, 0, 0, 0, 0], [4, 0, 0, 0, 0, 0, 0, 0, 0], [4, 0, 0, 0, 0, 0, 4, 4, 4],
-                    [4, 0, 0, 0, 0, 0, 0, 0, 0], [4, 0, 4, 0, 0, 0, 0, 0, 0], [4, 0, 0, 0, 0, 0, 4, 4, 4],
-                    [4, 4, 4, 4, 4, 4, 4, 4, 4], [4, 0, 0, 0, 0, 0, 4, 4, 4], [4, 0, 0, 0, 0, 0, 4, 4, 4]])
+        actualboard = testutil.loadpuzzlebyname(
+            "Case 1:Actual for test contains value in intersecting row, column, and block", "test_board_sudoku.txt")
 
-        self.assertTrue(p.matrixcontainsvalue(6, 6, 4) and not p.matrixcontainsvalue(1, 1, 5))
+        self.assertTrue(actualboard.sectioncontainsvalue(0, 7, 1))
+        actualboard = testutil.loadpuzzlebyname(
+            "Case 2:Actual for test contains value in intersecting row, column, and block", "test_board_sudoku.txt")
+
+        self.assertFalse(actualboard.sectioncontainsvalue(0, 7, 1))
 
     def test_completehorizontalblocksemptycells(self):
-        actualboard = testutil.loadpuzzlebyname("Actual for test horizontal block empty cells", "test_board_sudoku.txt")
-        expectedboard = testutil.loadpuzzlebyname("Expected for test horizontal block empty cells",
+        actualboard = testutil.loadpuzzlebyname("Case 1:Actual for test horizontal block empty cells",
+                                                "test_board_sudoku.txt")
+        expectedboard = testutil.loadpuzzlebyname("Case 1:Expected for test horizontal block empty cells",
+                                                  "test_board_sudoku.txt")
+
+        actualboard.completehorizontalblocksemptycells()
+
+        self.assertEqual(expectedboard.rows, actualboard.rows, msg="There is  difference at the row level")
+        self.assertEqual(expectedboard.columns, actualboard.columns, msg="There is  difference at the column level")
+        self.assertEqual(expectedboard.blocks, actualboard.blocks, msg="There is  difference at the block level")
+
+        actualboard = testutil.loadpuzzlebyname("Case 2:Actual for test horizontal block empty cells",
+                                                "test_board_sudoku.txt")
+        expectedboard = testutil.loadpuzzlebyname("Case 2:Expected for test horizontal block empty cells",
                                                   "test_board_sudoku.txt")
 
         actualboard.completehorizontalblocksemptycells()
@@ -89,8 +112,20 @@ class TestSudoku(TestCase):
         self.assertEqual(expectedboard.blocks, actualboard.blocks, msg="There is  difference at the block level")
 
     def test_completeverticalblocksemptycells(self):
-        actualboard = testutil.loadpuzzlebyname("Actual for test vertical block empty cells", "test_board_sudoku.txt")
-        expectedboard = testutil.loadpuzzlebyname("Expected for test vertical block empty cells",
+        actualboard = testutil.loadpuzzlebyname("Case 1:Actual for test vertical block empty cells",
+                                                "test_board_sudoku.txt")
+        expectedboard = testutil.loadpuzzlebyname("Case 1:Expected for test vertical block empty cells",
+                                                  "test_board_sudoku.txt")
+
+        actualboard.completeverticalblocksemptycells()
+
+        self.assertEqual(expectedboard.rows, actualboard.rows, msg="There is  difference at the row level")
+        self.assertEqual(expectedboard.columns, actualboard.columns, msg="There is  difference at the column level")
+        self.assertEqual(expectedboard.blocks, actualboard.blocks, msg="There is  difference at the block level")
+
+        actualboard = testutil.loadpuzzlebyname("Case 2:Actual for test vertical block empty cells",
+                                                "test_board_sudoku.txt")
+        expectedboard = testutil.loadpuzzlebyname("Case 2:Expected for test vertical block empty cells",
                                                   "test_board_sudoku.txt")
 
         actualboard.completeverticalblocksemptycells()

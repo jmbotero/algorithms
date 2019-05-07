@@ -129,7 +129,7 @@ class Sudoku:
             j = blockcoordinates[1]
 
         if insert_check_overwrite is None:
-            check = not self.matrixcontainsvalue(i, j, value)
+            check = not self.sectioncontainsvalue(i, j, value)
         else:
             check = insert_check_overwrite
 
@@ -163,7 +163,7 @@ class Sudoku:
 
             return zeroupdated
 
-    def matrixcontainsvalue(self, i, j, value):
+    def sectioncontainsvalue(self, i, j, value):
         row_contains = value in self.rows[i]
         column_contains = value in self.columns[j]
 
@@ -195,82 +195,43 @@ class Sudoku:
 
     def completesingleemptycellssections(self):
         self.__changes = 0  # reset change tracking
-        # process rows
         for i, row in enumerate(self.rows):
             if row.count(0) == 1:
                 j = row.index(0)
                 diff = list(set(row).symmetric_difference(Sudoku.base_number_set_with_zero))
-                value = diff[0]
-                if len(diff) > 1:
-                    raise ValueError(
-                        "Found more than one missing value (" + str(value) + ") in row (" + str(i) + ") = [" + ','.join(
-                            [str(v) for v in row]) + "], just expected one.")
-                if not self.matrixcontainsvalue(i, j, value):  # value not in row and value not in self.columns[j]:
+                if len(diff) == 1:
+                    value = diff[0]
                     self.setmatrixvalue(i, j, value)
-        # process columns
-        for j, col in enumerate(self.columns):
-            if col.count(0) == 1:
-                i = col.index(0)
-                diff = list(set(col).symmetric_difference(Sudoku.base_number_set_with_zero))
-                value = diff[0]
-                if len(diff) > 1:
-                    raise ValueError("Found more than one missing value (" + str(value) + ") in column (" + str(
-                        j) + ") = [" + ','.join([str(v) for v in col]) + "], just expected one.")
-                if not self.matrixcontainsvalue(i, j, value):  # value not in col and value not in self.rows[i]:
-                    self.setmatrixvalue(i, j, value)
-        # process.blocks
-        for i, block in enumerate(self.blocks):
-            if block.count(0) == 1:
-                j = block.index(0)
-                diff = list(set(block).symmetric_difference(Sudoku.base_number_set_with_zero))
-                value = diff[0]
-                if len(diff) > 1:
-                    raise ValueError("Found more than one missing value (" + str(value) + ") in block (" + str(
-                        i) + ") = [" + ','.join([str(v) for v in block]) + "], just expected one.")
-                cellcoordinates = self.blocktocellcoordinates(i, j)
-                if not self.matrixcontainsvalue(cellcoordinates[0], cellcoordinates[1], value):  # value not in block:
-                    self.setmatrixvalue(cellcoordinates[0], cellcoordinates[1], value)
+
+    def completeemptycellswithnotcontainedvalues(self):
+        self.__changes = 0  # reset change tracking
+
+        for i in range(Sudoku.matrix_height):
+            row = self.rows[i]
+            # first calculate a number's weight=empty cells which it could occupy
+            weights = {}
+            missingvalues = list(set(row).symmetric_difference(Sudoku.base_number_set_with_zero))
+            for value in missingvalues:
+                weight = 0
+                emptycells = [idx for idx, v in enumerate(row) if v == 0]
+                if emptycells is not None:
+                    for j in emptycells:
+                        match = self.sectioncontainsvalue(i, j, value)
+                        if match:
+                            weight += 1
+                    if weight != 0:
+                        weights[(value, (i, j))] = weight
+            lightcells = [cell for cell, weight in weights.items() if weight == 1]
+            # now fill those empty cells for which for certain value when adding it there it's weigth is 19meaning its only candidate for this cell)
+            for cell in lightcells:
+                val = cell[0]
+                cellcoordinates = cell[1]
+                self.setmatrixvalue(cellcoordinates[0], cellcoordinates[1], val)
 
     def completedoubleemptycellssections(self):
-        self.__changes = 0  # reset change tracking
-        # process rows
-        for i, row in enumerate(self.rows):
-            if row.count(0) == 2:
-                missings = list(set(row).symmetric_difference(Sudoku.base_number_set_with_zero))
-                zero_indexes = Mylist([idx for idx, item in enumerate(row) if item == 0])
-                j_a = zero_indexes[0]
-                j_b = zero_indexes[1]
-                a = missings[0]
-                b = missings[1]
-                a_in_firstindex = self.matrixcontainsvalue(i, j_a, a)
-                a_in_secondindex = self.matrixcontainsvalue(i, j_b, a)
-                b_in_firstindex = self.matrixcontainsvalue(i, j_a, b)
-                b_in_secondindex = self.matrixcontainsvalue(i, j_b, b)
-                if not a_in_firstindex and not b_in_secondindex:
-                    self.setmatrixvalue(i, j_a, a)
-                    self.setmatrixvalue(i, j_b, b)
-                elif not a_in_secondindex and not b_in_firstindex:
-                    self.setmatrixvalue(i, j_b, a)
-                    self.setmatrixvalue(i, j_a, b)
-        # process columns
-        for j, column in enumerate(self.columns):
-            if column.count(0) == 2:
-                missings = Mylist(list(set(column).symmetric_difference(Sudoku.base_number_set_with_zero)))
-                zero_indexes = Mylist([idx for idx, item in enumerate(column) if item == 0])
-                i_a = zero_indexes[0]
-                i_b = zero_indexes[1]
-                a = missings[0]
-                b = missings[1]
-                a_in_firstindex = self.matrixcontainsvalue(i_a, j, a)
-                a_in_secondindex = self.matrixcontainsvalue(i_b, j, a)
-                b_in_firstindex = self.matrixcontainsvalue(i_a, j, b)
-                b_in_secondindex = self.matrixcontainsvalue(i_b, j, b)
-                if not a_in_firstindex and not b_in_secondindex:
-                    self.setmatrixvalue(i_a, j, a)
-                    self.setmatrixvalue(i_b, j, b)
-                elif not a_in_secondindex and not b_in_firstindex:
-                    self.setmatrixvalue(i_b, j, a)
-                    self.setmatrixvalue(i_a, j, b)
+        self.__processdoubleemptycellsbyrow(self.rows, self.columns)
+        self.__processdoubleemptycellsbycolumn(self.columns, self.rows)
+        # self.__processdoubleemptycellsbyblock(self.blocks, self.rows)
 
     def completehorizontalblocksemptycells(self):
         self.__changes = 0  # reset change tracking
@@ -503,6 +464,16 @@ class Sudoku:
                 return irange
         return None
 
+    @staticmethod
+    def __gethorizontalblock_rowid(block_i):
+        if block_i in [0, 1, 2]:
+            rowid = 0
+        elif block_i in [3, 4, 5]:
+            rowid = 1
+        else:
+            rowid = 2
+        return rowid
+
     def __gethorizontalblocksemptycells(self, selected_block, block_i_index, index_value_in_adjacentblocks, value):
         selected_blockrow_indices = self.__gettopmiddlebottom_blockrowindices(index_value_in_adjacentblocks)
         if selected_blockrow_indices is not None:
@@ -661,6 +632,80 @@ class Sudoku:
 
     def __processblockramifications(self, block_i, value):
         self.__pocesshorizontalblockrow(block_i, value)
+
+    def __processdoubleemptycellsbyrow(self, bag: list, check_bag: list):
+        self.__changes = 0  # reset change tracking
+        for i, section in enumerate(bag):
+            if section.count(0) == 2:
+                missing_values = list(set(section).symmetric_difference(Sudoku.base_number_set_with_zero))
+                emptycells = Mylist([idx for idx, item in enumerate(section) if item == 0])
+                pair_match = [[False, False], [False, False]]
+                #       a   b :missing_values
+                # aa    T/F T/F
+                # bb    T/F T/F
+                # :emptycells
+                if len(missing_values) == len(emptycells):
+                    for x, val in enumerate(missing_values):
+                        for y, j in enumerate(emptycells):
+                            match = val in check_bag[j]
+                            pair_match[x][y] = match
+
+                v1: int = missing_values[0]
+                v2: int = missing_values[1]
+                j1: int = emptycells[0]
+                j2: int = emptycells[1]
+
+                # first value not contained only in right
+                if pair_match[0][0] and not pair_match[0][1]:
+                    # second value not contained in left
+                    if not pair_match[1][0] and pair_match[1][1]:
+                        # assign where not cpntained
+                        self.setmatrixvalue(i, j1, v2, insert_check_overwrite=True)
+                        self.setmatrixvalue(i, j2, v1, insert_check_overwrite=True)
+                # first value not contained only in left
+                elif not pair_match[0][0] and pair_match[0][1]:
+                    # secpond value not contained only in right
+                    if pair_match[1][0] and not pair_match[1][1]:
+                        # assign where not cpntained
+                        self.setmatrixvalue(i, j2, v1)
+                        self.setmatrixvalue(i, j1, v2)
+
+    def __processdoubleemptycellsbycolumn(self, bag: list, check_bag: list):
+        self.__changes = 0  # reset change tracking
+        for j, section in enumerate(bag):
+            if section.count(0) == 2:
+                missing_values = list(set(section).symmetric_difference(Sudoku.base_number_set_with_zero))
+                emptycells = Mylist([idx for idx, item in enumerate(section) if item == 0])
+                pair_match = [[False, False], [False, False]]
+                #       a   b :missing_values
+                # aa    T/F T/F
+                # bb    T/F T/F
+                # :emptycells
+                if len(missing_values) == len(emptycells):
+                    for x, val in enumerate(missing_values):
+                        for y, i in enumerate(emptycells):
+                            match = val in check_bag[i]
+                            pair_match[x][y] = match
+
+                v1: int = missing_values[0]
+                v2: int = missing_values[1]
+                i1: int = emptycells[0]
+                i2: int = emptycells[1]
+
+                # first value not contained only in right
+                if pair_match[0][0] and not pair_match[0][1]:
+                    # second value not contained in left
+                    if not pair_match[1][0] and pair_match[1][1]:
+                        # assign where not cpntained
+                        self.setmatrixvalue(i1, j, v2, insert_check_overwrite=True)
+                        self.setmatrixvalue(i2, j, v1, insert_check_overwrite=True)
+                # first value not contained only in left
+                elif not pair_match[0][0] and pair_match[0][1]:
+                    # secpond value not contained only in right
+                    if pair_match[1][0] and not pair_match[1][1]:
+                        # assign where not cpntained
+                        self.setmatrixvalue(i2, j, v1)
+                        self.setmatrixvalue(i1, j, v2)
 
 
 # noinspection SpellCheckingInspection

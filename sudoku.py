@@ -49,7 +49,7 @@ class Sudoku:
         self.base_number_set = set([i for i in range(1, self.matrix_height + 1)])
         self.base_number_set_with_zero = set([i for i in range(self.matrix_height + 1)])
 
-        self.boardname = name
+        self.name = name
         self.__changes = 0
         self.emptycellcount = 0
         self.coordinates = {}
@@ -69,11 +69,11 @@ class Sudoku:
 
             self.__countemptycells()
         elif rows is None or (isinstance(rows, list) and len(rows) == 0):
-            self.createemptyboard()
+            self.createemptygrid()
         elif rows is not None:
             raise ValueError("Set of rows provided generate an invalid matrix.")
 
-    def createemptyboard(self):
+    def createemptygrid(self):
         for i in range(self.matrix_height):
             row = [0] * self.matrix_height
             self.rows.append(row)
@@ -85,6 +85,10 @@ class Sudoku:
             self.blocks.append(block)
         self.emptycellcount = self.matrix_height * self.matrix_height
         self.__setblocktocellcoordinatemapping()
+
+    def copygrid(self):
+        result = [row[:] for row in self.rows]
+        return result
 
     def celltoblockccoordinates(self, i, j):
         return self.coordinates[(i, j)]
@@ -444,19 +448,41 @@ class Sudoku:
             value = self.rows[cellcoordinates[0]][cellcoordinates[1]]
             self.blocks[blockcoordinates[0]][blockcoordinates[1]] = value
 
-    @staticmethod
-    def __gethorizontalshift(i):
-        indexranges = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
+    '''
+    Calculate horizontal index (row) shfting to generate block coordinate mapping
+    '''
+
+    def __gethorizontalshift(self, k):
+        # build ranges dynamically based on block_height
+        indexranges = []
+        for i in range(self.block_height):
+            zero = i * self.block_height
+            rng = []
+            for j in range(zero, zero + self.block_height):
+                rng.append(j)
+            indexranges.append(rng)
+
         for shift, indexrange in enumerate(indexranges):
-            if i in indexrange:
+            if k in indexrange:
                 return shift
         return None
 
-    @staticmethod
-    def __getverticalshift(i):
-        indexranges = [[0, 3, 6], [1, 4, 7], [2, 5, 8]]
+    '''
+    Calculate vertical index (column)  shfting to generate block coordinate mapping
+    '''
+
+    def __getverticalshift(self, k):
+        # build ranges dynamically based on block_height
+        indexranges = []
+        for i in range(self.block_height):
+            upper = i + 2 * self.block_height + 1
+            rng = []
+            for j in range(i, upper, self.block_height):
+                rng.append(j)
+            indexranges.append(rng)
+
         for shift, indexrange in enumerate(indexranges):
-            if i in indexrange:
+            if k in indexrange:
                 return shift
         return None
 
@@ -716,14 +742,14 @@ class Sudoku:
 # noinspection SpellCheckingInspection
 class SudokuSolution:
 
-    def __init__(self, name, rows, columns, board):
+    def __init__(self, name, rows, columns, grid):
         self.boardname = name
         self.columns = columns
         self.rows = rows
-        self.preboard = board
-        self.postboard = ""
+        self.pregrid = grid
+        self.postgrid = ""
         self.solved = False
 
-    def logsolution(self, board, solution):
-        self.postboard = board
+    def logsolution(self, grid, solution):
+        self.postgrid = grid
         self.solved = solution

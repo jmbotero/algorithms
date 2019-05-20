@@ -29,8 +29,9 @@ solution = None  # solution grid
 
 def print_grid(grid):
     '''pretty print Sudoku grid'''
-    for row in grid:
-        print(' '.join([str(x) for x in row if x != 0]))
+    if grid is not None:
+        for row in grid:
+            print(' '.join([str(x) for x in row if x != 0]))
 
 
 def copy_grid(grid):
@@ -98,6 +99,7 @@ def solve(grid, spots, x):
     global n
 
     n = len(grid)
+    solution = []
 
     # all spots filled: stop searching
     if len(spots) == 0:

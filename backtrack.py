@@ -26,22 +26,26 @@ grid9 = [
 ]
 solution = None  # solution grid
 
+# noinspection SpellCheckingInspection
+'''pretty print Sudoku grid'''
 
-def print_grid(grid):
-    '''pretty print Sudoku grid'''
-    if grid is not None:
-        for row in grid:
+
+def print_grid(rows):
+    if rows is not None:
+        for row in rows:
             print(' '.join([str(x) for x in row if x != 0]))
 
 
-def copy_grid(grid):
-    result = [row[:] for row in grid]
+def copy_grid(rows):
+    result = [row[:] for row in rows]
     return result
 
 
-def check_rows(grid):
-    '''check rows for constraint validity'''
-    for row in grid:
+'''check rows for constraint validity'''
+
+
+def check_rows(rows):
+    for row in rows:
         xs = set()
 
         for x in row:
@@ -56,15 +60,19 @@ def check_rows(grid):
     return True
 
 
-def check_cols(grid):
-    '''check columns for constraint validity'''
-    cols = [[row[i] for row in grid] for i in range(n)]
+'''check columns for constraint validity'''
+
+
+def check_cols(rows):
+    cols = [[row[i] for row in rows] for i in range(n)]
 
     return check_rows(cols)
 
 
-def check_sub_grids(grid):
-    '''check sub-grids for constraint validity'''
+'''check sub-grids for constraint validity'''
+
+
+def check_sub_grids(rows):
     m = int(n ** 0.5)
 
     # sub-grids exist for squared grids only
@@ -73,7 +81,7 @@ def check_sub_grids(grid):
 
     for i in range(m):
         for j in range(m):
-            sub_grid = [row[j * m:(j + 1) * m] for row in grid[i * m:(i + 1) * m]]
+            sub_grid = [row[j * m:(j + 1) * m] for row in rows[i * m:(i + 1) * m]]
             xs = set()
 
             for row in sub_grid:
@@ -89,16 +97,18 @@ def check_sub_grids(grid):
     return True
 
 
-def check_solution(grid):
-    '''check solution grid for goal validity'''
-    return sum([row.count(0) for row in grid]) == 0
+'''check solution grid for goal validity'''
 
 
-def solve(grid, spots, x):
+def check_solution(rows):
+    return sum([row.count(0) for row in rows]) == 0
+
+
+def solve(rows, spots, x):
     global solution
     global n
 
-    n = len(grid)
+    n = len(rows)
     solution = []
 
     # all spots filled: stop searching
@@ -111,23 +121,23 @@ def solve(grid, spots, x):
 
     # set the (i, j) cell to x
     (i, j) = spots[0]
-    grid[i][j] = x
+    rows[i][j] = x
 
     # the grid is invalid: stop searching
-    is_grid_valid = check_rows(grid) and check_cols(grid) and check_sub_grids(grid)
+    is_grid_valid = check_rows(rows) and check_cols(rows) and check_sub_grids(rows)
     if not is_grid_valid:
         return None
 
     # the grid is valid and solved: stop searching
-    is_grid_solved = check_solution(grid)
+    is_grid_solved = check_solution(rows)
     if is_grid_solved:
-        solution = copy_grid(grid)
-        return grid
+        solution = copy_grid(rows)
+        return rows
 
     # here, the grid is valid but not solved: continue searching
     for x in range(n):
         spots1 = spots[1:]  # clone `spots` array starting from 1st index
-        solve(copy_grid(grid), spots1, x + 1)
+        solve(copy_grid(rows), spots1, x + 1)
 
 
 def main():

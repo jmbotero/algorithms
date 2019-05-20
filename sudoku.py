@@ -28,11 +28,6 @@ class Mylist(list):
 
 # noinspection SpellCheckingInspection
 class Sudoku:
-    matrix_height = 9
-    block_height = 3
-    base_number_set = {1, 2, 3, 4, 5, 6, 7, 8, 9}
-    base_number_set_with_zero = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
-
     def __init__(self, name, rows=None):
         # Matrix definitions:
         # rows: horizontal 0..8 list
@@ -40,6 +35,20 @@ class Sudoku:
         # blocks:  0,1,2
         #          3,4,5
         #          6,7,8 list
+        if rows:
+            self.matrix_height = len(rows)
+            x = int(self.matrix_height ** 0.5)
+            if x * x == self.matrix_height:
+                self.block_height = x
+            else:
+                self.block_height = self.matrix_height
+        else:
+            self.matrix_height = 9
+            self.block_height = 3
+
+        self.base_number_set = set([i for i in range(1, self.matrix_height + 1)])
+        self.base_number_set_with_zero = set([i for i in range(self.matrix_height + 1)])
+
         self.boardname = name
         self.__changes = 0
         self.emptycellcount = 0
@@ -51,11 +60,11 @@ class Sudoku:
             # populate rows
             self.rows = rows[:]  # copy list by slicing
             # populate columns
-            if len(self.rows) == Sudoku.matrix_height:
+            if len(self.rows) == self.matrix_height:
                 self.__populatecolumns()
             # populate blocks
             self.__setblocktocellcoordinatemapping()
-            if len(self.rows) == Sudoku.matrix_height:
+            if len(self.rows) == self.matrix_height:
                 self.__populateblocks()
 
             self.__countemptycells()
@@ -65,16 +74,16 @@ class Sudoku:
             raise ValueError("Set of rows provided generate an invalid matrix.")
 
     def createemptyboard(self):
-        for i in range(Sudoku.matrix_height):
-            row = [0] * Sudoku.matrix_height
+        for i in range(self.matrix_height):
+            row = [0] * self.matrix_height
             self.rows.append(row)
-        for i in range(Sudoku.matrix_height):
-            col = [0] * Sudoku.matrix_height
+        for i in range(self.matrix_height):
+            col = [0] * self.matrix_height
             self.columns.append(col)
-        for i in range(Sudoku.matrix_height):
-            block = [0] * Sudoku.matrix_height
+        for i in range(self.matrix_height):
+            block = [0] * self.matrix_height
             self.blocks.append(block)
-        self.emptycellcount = Sudoku.matrix_height * Sudoku.matrix_height
+        self.emptycellcount = self.matrix_height * self.matrix_height
         self.__setblocktocellcoordinatemapping()
 
     def celltoblockccoordinates(self, i, j):
@@ -88,35 +97,35 @@ class Sudoku:
                 break
         return value
 
-    @staticmethod
-    def ismatrixvalid(rows):
-        if len(rows) != Sudoku.matrix_height:
+    def ismatrixvalid(self, rows):
+        if len(rows) != self.matrix_height:
             return False
         else:
             for row in rows:
-                if not isinstance(row, list) and len(row) != Sudoku.matrix_height:
+                if not isinstance(row, list) and len(row) != self.matrix_height:
                     return False
-                elif isinstance(row, list) and len(row) == Sudoku.matrix_height:
+                elif isinstance(row, list) and len(row) == self.matrix_height:
                     for n in row:  # only allow '0' to be duplicate and only allow valid numbers
-                        if n != 0 and row.count(n) > 1 and n not in Sudoku.base_number_set:
+                        if (n != 0 and row.count(n) > 1) and n not in self.base_number_set:
                             return False
         return True
 
     @property
     def ismatrixcomplete(self):
-        rowmatch = True
+        valid_row = True
 
         for row in self.rows:
-            diff = set(row).symmetric_difference(Sudoku.base_number_set)
-            if len(diff) > 0:
-                rowmatch = False
+            unique_values = set(row)
+            missing_values = set(row).symmetric_difference(self.base_number_set)
+            if len(missing_values) > 0 and len(unique_values) == len(row):
+                valid_row = False
                 break
 
-        return rowmatch and self.emptycellcount == 0
+        return valid_row
 
     @property
     def ismatrixsolved(self):
-        return self.ismatrixcomplete and self.__changes == 0
+        return self.ismatrixcomplete and sum([row.count(0) for row in self.rows]) == 0
 
     def setmatrixvalue(self, i, j, value, overwrite=False, startfromblockcoordinates=False,
                        insert_check_overwrite=None):
@@ -167,10 +176,14 @@ class Sudoku:
         row_contains = value in self.rows[i]
         column_contains = value in self.columns[j]
 
-        blockcoordinates = self.celltoblockccoordinates(i, j)
-        block_contains = value in self.blocks[blockcoordinates[0]]
+        # only check block contain if there are blocks
+        if self.block_height != self.matrix_height:
+            blockcoordinates = self.celltoblockccoordinates(i, j)
+            block_contains = value in self.blocks[blockcoordinates[0]]
 
-        return row_contains or column_contains or block_contains
+            return row_contains or column_contains or block_contains
+        else:
+            return row_contains or column_contains
 
     def get(self, i, j):
         return self.rows[i][j]
@@ -178,14 +191,14 @@ class Sudoku:
     def tostring(self, label=None, color=Color.reset):
         result = ""
         matrix = ""
-        for i in range(Sudoku.matrix_height):
+        for i in range(self.matrix_height):
             matrix += "\t"
-            for j in range(Sudoku.matrix_height):
+            for j in range(self.matrix_height):
                 matrix += str(self.rows[i][j]) + " "
-                if (j + 1) % Sudoku.block_height == 0:
+                if (j + 1) % self.block_height == 0:
                     matrix += " "
             matrix += "\n"
-            if (i + 1) % Sudoku.block_height == 0:
+            if (i + 1) % self.block_height == 0:
                 matrix += "\n"
                 if label is None:
                     result = color.value + self.boardname + "\n" + matrix + Color.reset.value
@@ -198,35 +211,35 @@ class Sudoku:
         for i, row in enumerate(self.rows):
             if row.count(0) == 1:
                 j = row.index(0)
-                diff = list(set(row).symmetric_difference(Sudoku.base_number_set_with_zero))
+                diff = list(set(row).symmetric_difference(self.base_number_set_with_zero))
                 if len(diff) == 1:
                     value = diff[0]
                     self.setmatrixvalue(i, j, value)
 
-    def completeemptycellswithnotcontainedvalues(self):
-        self.__changes = 0  # reset change tracking
-
-        for i in range(Sudoku.matrix_height):
-            row = self.rows[i]
-            # first calculate a number's weight=empty cells which it could occupy
-            weights = {}
-            missingvalues = list(set(row).symmetric_difference(Sudoku.base_number_set_with_zero))
-            for value in missingvalues:
-                weight = 0
-                emptycells = [idx for idx, v in enumerate(row) if v == 0]
-                if emptycells is not None:
-                    for j in emptycells:
-                        match = self.sectioncontainsvalue(i, j, value)
-                        if match:
-                            weight += 1
-                    if weight != 0:
-                        weights[(value, (i, j))] = weight
-            lightcells = [cell for cell, weight in weights.items() if weight == 1]
-            # now fill those empty cells for which for certain value when adding it there it's weigth is 19meaning its only candidate for this cell)
-            for cell in lightcells:
-                val = cell[0]
-                cellcoordinates = cell[1]
-                self.setmatrixvalue(cellcoordinates[0], cellcoordinates[1], val)
+    # def completeemptycellswithnotcontainedvalues(self):
+    #     self.__changes = 0  # reset change tracking
+    #
+    #     for i in range(self.matrix_height):
+    #         row = self.rows[i]
+    #         # first calculate a number's weight=empty cells which it could occupy
+    #         weights = {}
+    #         missingvalues = list(set(row).symmetric_difference(self.base_number_set_with_zero))
+    #         for value in missingvalues:
+    #             weight = 0
+    #             emptycells = [idx for idx, v in enumerate(row) if v == 0]
+    #             if emptycells is not None:
+    #                 for j in emptycells:
+    #                     match = self.sectioncontainsvalue(i, j, value)
+    #                     if match:
+    #                         weight += 1
+    #                 if weight != 0:
+    #                     weights[(value, (i, j))] = weight
+    #         lightcells = [cell for cell, weight in weights.items() if weight == 1]
+    #         # now fill those empty cells for which for certain value when adding it there it's weigth is 19meaning its only candidate for this cell)
+    #         for cell in lightcells:
+    #             val = cell[0]
+    #             cellcoordinates = cell[1]
+    #             self.setmatrixvalue(cellcoordinates[0], cellcoordinates[1], val)
 
     def completedoubleemptycellssections(self):
         self.__processdoubleemptycellsbyrow(self.rows, self.columns)
@@ -235,58 +248,17 @@ class Sudoku:
 
     def completehorizontalblocksemptycells(self):
         self.__changes = 0  # reset change tracking
-        for value in range(1, Sudoku.matrix_height + 1):
+        for value in range(1, self.matrix_height + 1):
             # loop through block groups
-            for block_rowid in range(0, Sudoku.matrix_height, Sudoku.block_height):
+            for block_rowid in range(0, self.matrix_height, self.block_height):
                 self.__pocesshorizontalblockrow(block_rowid, value)
-                # i = 0
-                # selected_block = None
-                # index_value_adjacentblocks = []
-                # block_id = list(range(block_rowid, block_rowid + Sudoku.block_height))
-                # # look for block without value in set of blocks in uberrow
-                # block_range = block_id[:]
-                # for i in block_range:
-                #     block = self.blocks[i]
-                #     if value in block:
-                #         block_id.remove(i)
-                #         index_value_adjacentblocks.append(block.index(value))
-                # if len(block_id) == 1:
-                #     i = block_id[0]
-                #     selected_block = self.blocks[i]
-                # # find empty cells in block
-                # if selected_block is not None:
-                #     emptycells = self.__gethorizontalblocksemptycells(selected_block, i, index_value_adjacentblocks,
-                #                                                       value)
-                #     for j in emptycells:
-                #         self.setmatrixvalue(i, j, value, startfromblockcoordinates=True)
 
     def completeverticalblocksemptycells(self):
         self.__changes = 0  # reset change tracking
-        for value in range(1, Sudoku.matrix_height + 1):
+        for value in range(1, self.matrix_height + 1):
             # loop through block groups
-            for block_rowid in range(Sudoku.block_height):
+            for block_rowid in range(self.block_height):
                 self.__processverticalblockrow(block_rowid, value)
-                # i = 0
-                # selected_block = None
-                # index_value_adjacentblocks = []
-                # block_id = list(range(block_rowid, Sudoku.matrix_height, Sudoku.block_height))
-                # # look for block without value in set of blocks in uberrow
-                # block_range = block_id[:]
-                # for i in block_range:
-                #     block = self.blocks[i]
-                #     if value in block:
-                #         block_id.remove(i)
-                #         index_value_adjacentblocks.append(block.index(value))
-                # if len(block_id) == 1:
-                #     i = block_id[0]
-                #     selected_block = self.blocks[i]
-                # # find empty cells in block
-                # if selected_block is not None:
-                #     emptycells = self.__getverticalblocksemptycells(selected_block, i, index_value_adjacentblocks, value)
-                #     for j in emptycells:
-                #         updated = self.setmatrixvalue(i, j, value, startfromblockcoordinates=True)
-                #         # if updated:
-                #         #     self.__processblockramifications(i, value)
 
     def resetchangetrackingcount(self):
         self.__changes = 0
@@ -340,106 +312,116 @@ class Sudoku:
         self.emptycellcount = count
 
     def __setblocktocellcoordinatemapping(self):
-        # todo: replace hard-coding with loops
-        # for i in range(Sudoku.matrix_height):
-        #     for j in range(Sudoku.matrix_height):
-        #         block_i = self.__getrowshift(i) * Sudoku.block_height + self.__getrowshift(i)
-        #         block_j = self.__getrowshift(i) * Sudoku.block_height + self.__getcolumnshift(j)
-        #         cellcoordinates = (i, j)
-        #         blockcoordinates = (block_i, block_j)
-        #         self.coordinates[cellcoordinates] = blockcoordinates
+        # dict(celllcoordinates, blockcoordinatess)
 
-        # cellcoordinates(i=up/down,j=left/right)
-        # dict(celllcoordinates, blokcoordinatess)
-        self.coordinates[(0, 0)] = (0, 0)
-        self.coordinates[(0, 1)] = (0, 1)
-        self.coordinates[(0, 2)] = (0, 2)
-        self.coordinates[(0, 3)] = (1, 0)
-        self.coordinates[(0, 4)] = (1, 1)
-        self.coordinates[(0, 5)] = (1, 2)
-        self.coordinates[(0, 6)] = (2, 0)
-        self.coordinates[(0, 7)] = (2, 1)
-        self.coordinates[(0, 8)] = (2, 2)
+        # first check if there are blocks
+        if self.block_height != self.matrix_height:
+            # cellcoordinates(i=up/down,j=left/right)
+            for i in range(self.matrix_height):
+                for j in range(self.matrix_height):
+                    block_i = self.__gethorizontalshift(i) * self.block_height + self.__gethorizontalshift(j)
+                    block_j = self.__getverticalshift(i) * self.block_height + self.__getverticalshift(j)
+                    cellcoordinates = (i, j)
+                    blockcoordinates = (block_i, block_j)
+                    self.coordinates[cellcoordinates] = blockcoordinates
+        else:
+            for i in range(self.matrix_height):
+                for j in range(self.matrix_height):
+                    block_i = 0
+                    block_j = (i * self.matrix_height) + j
+                    cellcoordinates = (i, j)
+                    blockcoordinates = (block_i, block_j)
+                    self.coordinates[cellcoordinates] = blockcoordinates
 
-        self.coordinates[(1, 0)] = (0, 3)
-        self.coordinates[(1, 1)] = (0, 4)
-        self.coordinates[(1, 2)] = (0, 5)
-        self.coordinates[(1, 3)] = (1, 3)
-        self.coordinates[(1, 4)] = (1, 4)
-        self.coordinates[(1, 5)] = (1, 5)
-        self.coordinates[(1, 6)] = (2, 3)
-        self.coordinates[(1, 7)] = (2, 4)
-        self.coordinates[(1, 8)] = (2, 5)
-
-        self.coordinates[(2, 0)] = (0, 6)
-        self.coordinates[(2, 1)] = (0, 7)
-        self.coordinates[(2, 2)] = (0, 8)
-        self.coordinates[(2, 3)] = (1, 6)
-        self.coordinates[(2, 4)] = (1, 7)
-        self.coordinates[(2, 5)] = (1, 8)
-        self.coordinates[(2, 6)] = (2, 6)
-        self.coordinates[(2, 7)] = (2, 7)
-        self.coordinates[(2, 8)] = (2, 8)
-
-        self.coordinates[(3, 0)] = (3, 0)
-        self.coordinates[(3, 1)] = (3, 1)
-        self.coordinates[(3, 2)] = (3, 2)
-        self.coordinates[(3, 3)] = (4, 0)
-        self.coordinates[(3, 4)] = (4, 1)
-        self.coordinates[(3, 5)] = (4, 2)
-        self.coordinates[(3, 6)] = (5, 0)
-        self.coordinates[(3, 7)] = (5, 1)
-        self.coordinates[(3, 8)] = (5, 2)
-
-        self.coordinates[(4, 0)] = (3, 3)
-        self.coordinates[(4, 1)] = (3, 4)
-        self.coordinates[(4, 2)] = (3, 5)
-        self.coordinates[(4, 3)] = (4, 3)
-        self.coordinates[(4, 4)] = (4, 4)
-        self.coordinates[(4, 5)] = (4, 5)
-        self.coordinates[(4, 6)] = (5, 3)
-        self.coordinates[(4, 7)] = (5, 4)
-        self.coordinates[(4, 8)] = (5, 5)
-
-        self.coordinates[(5, 0)] = (3, 6)
-        self.coordinates[(5, 1)] = (3, 7)
-        self.coordinates[(5, 2)] = (3, 8)
-        self.coordinates[(5, 3)] = (4, 6)
-        self.coordinates[(5, 4)] = (4, 7)
-        self.coordinates[(5, 5)] = (4, 8)
-        self.coordinates[(5, 6)] = (5, 6)
-        self.coordinates[(5, 7)] = (5, 7)
-        self.coordinates[(5, 8)] = (5, 8)
-
-        self.coordinates[(6, 0)] = (6, 0)
-        self.coordinates[(6, 1)] = (6, 1)
-        self.coordinates[(6, 2)] = (6, 2)
-        self.coordinates[(6, 3)] = (7, 0)
-        self.coordinates[(6, 4)] = (7, 1)
-        self.coordinates[(6, 5)] = (7, 2)
-        self.coordinates[(6, 6)] = (8, 0)
-        self.coordinates[(6, 7)] = (8, 1)
-        self.coordinates[(6, 8)] = (8, 2)
-
-        self.coordinates[(7, 0)] = (6, 3)
-        self.coordinates[(7, 1)] = (6, 4)
-        self.coordinates[(7, 2)] = (6, 5)
-        self.coordinates[(7, 3)] = (7, 3)
-        self.coordinates[(7, 4)] = (7, 4)
-        self.coordinates[(7, 5)] = (7, 5)
-        self.coordinates[(7, 6)] = (8, 3)
-        self.coordinates[(7, 7)] = (8, 4)
-        self.coordinates[(7, 8)] = (8, 5)
-
-        self.coordinates[(8, 0)] = (6, 6)
-        self.coordinates[(8, 1)] = (6, 7)
-        self.coordinates[(8, 2)] = (6, 8)
-        self.coordinates[(8, 3)] = (7, 6)
-        self.coordinates[(8, 4)] = (7, 7)
-        self.coordinates[(8, 5)] = (7, 8)
-        self.coordinates[(8, 6)] = (8, 6)
-        self.coordinates[(8, 7)] = (8, 7)
-        self.coordinates[(8, 8)] = (8, 8)
+        # self.coordinates[(0, 0)] = (0, 0)
+        # self.coordinates[(0, 1)] = (0, 1)
+        # self.coordinates[(0, 2)] = (0, 2)
+        # self.coordinates[(0, 3)] = (1, 0)
+        # self.coordinates[(0, 4)] = (1, 1)
+        # self.coordinates[(0, 5)] = (1, 2)
+        # self.coordinates[(0, 6)] = (2, 0)
+        # self.coordinates[(0, 7)] = (2, 1)
+        # self.coordinates[(0, 8)] = (2, 2)
+        #
+        # self.coordinates[(1, 0)] = (0, 3)
+        # self.coordinates[(1, 1)] = (0, 4)
+        # self.coordinates[(1, 2)] = (0, 5)
+        # self.coordinates[(1, 3)] = (1, 3)
+        # self.coordinates[(1, 4)] = (1, 4)
+        # self.coordinates[(1, 5)] = (1, 5)
+        # self.coordinates[(1, 6)] = (2, 3)
+        # self.coordinates[(1, 7)] = (2, 4)
+        # self.coordinates[(1, 8)] = (2, 5)
+        #
+        # self.coordinates[(2, 0)] = (0, 6)
+        # self.coordinates[(2, 1)] = (0, 7)
+        # self.coordinates[(2, 2)] = (0, 8)
+        # self.coordinates[(2, 3)] = (1, 6)
+        # self.coordinates[(2, 4)] = (1, 7)
+        # self.coordinates[(2, 5)] = (1, 8)
+        # self.coordinates[(2, 6)] = (2, 6)
+        # self.coordinates[(2, 7)] = (2, 7)
+        # self.coordinates[(2, 8)] = (2, 8)
+        #
+        # self.coordinates[(3, 0)] = (3, 0)
+        # self.coordinates[(3, 1)] = (3, 1)
+        # self.coordinates[(3, 2)] = (3, 2)
+        # self.coordinates[(3, 3)] = (4, 0)
+        # self.coordinates[(3, 4)] = (4, 1)
+        # self.coordinates[(3, 5)] = (4, 2)
+        # self.coordinates[(3, 6)] = (5, 0)
+        # self.coordinates[(3, 7)] = (5, 1)
+        # self.coordinates[(3, 8)] = (5, 2)
+        #
+        # self.coordinates[(4, 0)] = (3, 3)
+        # self.coordinates[(4, 1)] = (3, 4)
+        # self.coordinates[(4, 2)] = (3, 5)
+        # self.coordinates[(4, 3)] = (4, 3)
+        # self.coordinates[(4, 4)] = (4, 4)
+        # self.coordinates[(4, 5)] = (4, 5)
+        # self.coordinates[(4, 6)] = (5, 3)
+        # self.coordinates[(4, 7)] = (5, 4)
+        # self.coordinates[(4, 8)] = (5, 5)
+        #
+        # self.coordinates[(5, 0)] = (3, 6)
+        # self.coordinates[(5, 1)] = (3, 7)
+        # self.coordinates[(5, 2)] = (3, 8)
+        # self.coordinates[(5, 3)] = (4, 6)
+        # self.coordinates[(5, 4)] = (4, 7)
+        # self.coordinates[(5, 5)] = (4, 8)
+        # self.coordinates[(5, 6)] = (5, 6)
+        # self.coordinates[(5, 7)] = (5, 7)
+        # self.coordinates[(5, 8)] = (5, 8)
+        #
+        # self.coordinates[(6, 0)] = (6, 0)
+        # self.coordinates[(6, 1)] = (6, 1)
+        # self.coordinates[(6, 2)] = (6, 2)
+        # self.coordinates[(6, 3)] = (7, 0)
+        # self.coordinates[(6, 4)] = (7, 1)
+        # self.coordinates[(6, 5)] = (7, 2)
+        # self.coordinates[(6, 6)] = (8, 0)
+        # self.coordinates[(6, 7)] = (8, 1)
+        # self.coordinates[(6, 8)] = (8, 2)
+        #
+        # self.coordinates[(7, 0)] = (6, 3)
+        # self.coordinates[(7, 1)] = (6, 4)
+        # self.coordinates[(7, 2)] = (6, 5)
+        # self.coordinates[(7, 3)] = (7, 3)
+        # self.coordinates[(7, 4)] = (7, 4)
+        # self.coordinates[(7, 5)] = (7, 5)
+        # self.coordinates[(7, 6)] = (8, 3)
+        # self.coordinates[(7, 7)] = (8, 4)
+        # self.coordinates[(7, 8)] = (8, 5)
+        #
+        # self.coordinates[(8, 0)] = (6, 6)
+        # self.coordinates[(8, 1)] = (6, 7)
+        # self.coordinates[(8, 2)] = (6, 8)
+        # self.coordinates[(8, 3)] = (7, 6)
+        # self.coordinates[(8, 4)] = (7, 7)
+        # self.coordinates[(8, 5)] = (7, 8)
+        # self.coordinates[(8, 6)] = (8, 6)
+        # self.coordinates[(8, 7)] = (8, 7)
+        # self.coordinates[(8, 8)] = (8, 8)
 
     def __populatecolumns(self):
         # transpose through list comprehension
@@ -448,12 +430,35 @@ class Sudoku:
     def __populateblocks(self):
         # create empty block lists first
         self.blocks = []
-        for i in range(Sudoku.matrix_height):
-            block = [0] * Sudoku.matrix_height
+        # first check if there are blocks
+        if self.block_height != self.matrix_height:
+            for i in range(self.matrix_height):
+                block = [0] * self.matrix_height
+                self.blocks.append(block)
+        else:
+            block = [0] * (self.matrix_height ** 2)
             self.blocks.append(block)
+
+        # second populate block list
         for cellcoordinates, blockcoordinates in self.coordinates.items():
             value = self.rows[cellcoordinates[0]][cellcoordinates[1]]
             self.blocks[blockcoordinates[0]][blockcoordinates[1]] = value
+
+    @staticmethod
+    def __gethorizontalshift(i):
+        indexranges = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
+        for shift, indexrange in enumerate(indexranges):
+            if i in indexrange:
+                return shift
+        return None
+
+    @staticmethod
+    def __getverticalshift(i):
+        indexranges = [[0, 3, 6], [1, 4, 7], [2, 5, 8]]
+        for shift, indexrange in enumerate(indexranges):
+            if i in indexrange:
+                return shift
+        return None
 
     @staticmethod
     def __getdadjacentsectionindices(i):
@@ -590,7 +595,7 @@ class Sudoku:
         i = 0
         selected_block = None
         index_value_adjacentblocks = []
-        block_id = list(range(block_rowid, block_rowid + Sudoku.block_height))
+        block_id = list(range(block_rowid, block_rowid + self.block_height))
         # look for block without value in set of blocks in uberrow
         block_range = block_id[:]
         for i in block_range:
@@ -611,7 +616,7 @@ class Sudoku:
         i = 0
         selected_block = None
         index_value_adjacentblocks = []
-        block_id = list(range(block_rowid, Sudoku.matrix_height, Sudoku.block_height))
+        block_id = list(range(block_rowid, self.matrix_height, self.block_height))
         # look for block without value in set of blocks in uberrow
         block_range = block_id[:]
         for i in block_range:
@@ -637,7 +642,7 @@ class Sudoku:
         self.__changes = 0  # reset change tracking
         for i, section in enumerate(bag):
             if section.count(0) == 2:
-                missing_values = list(set(section).symmetric_difference(Sudoku.base_number_set_with_zero))
+                missing_values = list(set(section).symmetric_difference(self.base_number_set_with_zero))
                 emptycells = Mylist([idx for idx, item in enumerate(section) if item == 0])
                 pair_match = [[False, False], [False, False]]
                 #       a   b :missing_values
@@ -674,7 +679,7 @@ class Sudoku:
         self.__changes = 0  # reset change tracking
         for j, section in enumerate(bag):
             if section.count(0) == 2:
-                missing_values = list(set(section).symmetric_difference(Sudoku.base_number_set_with_zero))
+                missing_values = list(set(section).symmetric_difference(self.base_number_set_with_zero))
                 emptycells = Mylist([idx for idx, item in enumerate(section) if item == 0])
                 pair_match = [[False, False], [False, False]]
                 #       a   b :missing_values

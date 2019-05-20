@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from backtrack import *
 from sudoku import Color
 from sudoku import Sudoku
 from sudoku import SudokuSolution
@@ -89,48 +90,13 @@ def __puzzle4():
 
 
 # noinspection SpellCheckingInspection
-def loadpuzzles(filename):
+def loadpuzzles(filename, puzzlename=""):
+    puzzle = None
     puzzles = []
-    rowcount = 0
-    cellcount = 0
     row = []
     rows = []
     name = ""
-
-    path = get_project_root()
-    filename = f"{path}/data/{filename}"
-    file = open(filename, encoding="utf-8-sig")  # use default mode='r' for utf8
-    line = file.readline().strip()
-    while line:
-        if line.isnumeric():
-            for c in line:
-                row.append(int(c))
-                cellcount += 1
-            if cellcount == Sudoku.matrix_height:
-                cellcount = 0
-                rows.append(row)
-                rowcount += 1
-                row = []
-            if rowcount == Sudoku.matrix_height:
-                puzzles.append(Sudoku(name, rows))
-                rows = []
-                rowcount = 0
-        else:
-            name = line
-            cellcount = 0
-            rowcount = 0
-        line = file.readline().strip()
-    file.close()
-    return puzzles
-
-
-# noinspection SpellCheckingInspection
-def loadpuzzlebyname(puzzlename, filename):
-    rowcount = 0
-    cellcount = 0
-    row = []
-    rows = []
-    processpuzzle = False
+    processpuzzle = puzzlename == ""
 
     path = get_project_root()
     filename = f"{path}/data/{filename}"
@@ -141,22 +107,41 @@ def loadpuzzlebyname(puzzlename, filename):
             if processpuzzle:
                 for c in line:
                     row.append(int(c))
-                    cellcount += 1
-                if cellcount == Sudoku.matrix_height:
-                    cellcount = 0
-                    rows.append(row)
-                    rowcount += 1
-                    row = []
+                rows.append(row)
+                row = []
         else:
+            if puzzlename != "" and rows:
+                puzzle = Sudoku(puzzlename, rows)
+                rows = []
+            elif name != "" and rows:
+                puzzle = Sudoku(name, rows)
+                rows = []
+            else:
+                puzzle = None
+
             name = line
-            processpuzzle = name == puzzlename
-            cellcount = 0
-            rowcount = 0
+
+            if puzzle is not None:
+                puzzles.append(puzzle)
+            if puzzlename != "":
+                processpuzzle = name == puzzlename
         line = file.readline().strip()
+
+    if name != "" and rows:  # add the last one
+        puzzle = Sudoku(name, rows)
+        puzzles.append(puzzle)
+
     file.close()
 
-    return Sudoku(puzzlename, rows)
+    if puzzlename == "":
+        return puzzles
+    else:
+        return puzzles[0]
 
+
+# noinspection SpellCheckingInspection
+def loadpuzzlebyname(puzzlename, filename):
+    return loadpuzzles(filename, puzzlename)
 
 # noinspection SpellCheckingInspection
 def __solve(puzzle):
@@ -214,12 +199,37 @@ def __solve(puzzle):
     print(f"Empty cell count = {puzzle.emptycellcount}", end="\n")
 
 
+def __solve_backtrack(puzzle):
+    # list all spots
+    l: int = len(puzzle)
+    spots = []
+    for i in range(l):
+        for j in range(l):
+            if puzzle[i][j] == 0:
+                spots.append((i, j))
+
+    # solve grid
+    s = None
+    x = 0
+    while 1:
+        if x == l:
+            x = 0
+
+        if s is None:
+            s = solve(copy_grid(puzzle), spots, x + 1)
+        if s is not None:
+            break
+        else:
+            x += 1
+    if s is not None:
+        print_grid(s)
+
+
 # noinspection SpellCheckingInspection
 def __main_singlepuzzle():
-    mypuzzle = loadpuzzlebyname("Grid 33", "board_sudoku_1.txt")
+    mypuzzle = loadpuzzlebyname("Lesson 3x3", "board_sudoku_2.txt")
 
-    # mypuzzle.completeemptycellswithnotcontainedvalues()
-    __solve(mypuzzle)
+    __solve_backtrack(mypuzzle.rows)
 
 
 # noinspection SpellCheckingInspection

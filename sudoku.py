@@ -1,3 +1,4 @@
+import time
 from enum import Enum
 
 
@@ -154,15 +155,9 @@ class Sudoku:
             return row_contains or column_contains
 
     def createemptygrid(self):
-        for i in range(self.grid_height):
-            row = [0] * self.grid_height
-            self.rows.append(row)
-        for i in range(self.grid_height):
-            col = [0] * self.grid_height
-            self.columns.append(col)
-        for i in range(self.grid_height):
-            block = [0] * self.grid_height
-            self.blocks.append(block)
+        self.rows = [[0] * self.grid_height for _ in range(self.grid_height)]
+        self.columns = [[0] * self.grid_height for _ in range(self.grid_height)]
+        self.blocks = [[0] * self.grid_height for _ in range(self.grid_height)]
         self.emptycellcount = self.grid_height * self.grid_height
         self.__setblocktocellcoordinatemapping()
 
@@ -234,18 +229,21 @@ class Sudoku:
     def solve(self):
         print(self.tostring())  # starting puzzle
 
+        start = time.time()
+
         emptycells = self.__getempycells()
-
-        # backtrack grid using backtraking algorithm
-        for value in range(1, self.grid_height + 1):  # move range one
-            self.__backtrack(emptycells, value)
-
         color = Color.red
-        if self.isgridcomplete:
-            color = Color.green
+        if self.__backtrack(emptycells):
+            if self.isgridsolved:
+                color = Color.green
 
-        print(self.tostring(f"Solution", color), end="")
-        print(f"Empty cell count = {self.emptycellcount}", end="\n")
+            print(self.tostring(color=color))
+            print(f"Empty cell count = {self.emptycellcount}", end="\n")
+        else:
+            print(color.value + "-- error --" + Color.reset.value)
+
+        stop = time.time()
+        print(f"Single puzzle lapse == {round((stop - start) * 1000, 1)} ms")
 
     # endregion
 
@@ -436,29 +434,23 @@ class Sudoku:
                 return shift
         return None
 
-    def __backtrack(self, emptycells, value):
-        n = value
-        # loop while another search solved the grid and all spots filled: stop searching
-        while len(emptycells) > 0 and not self.isgridsolved:
-            (i, j) = emptycells[0]
+    def __backtrack(self, emptycells):
+        # if all cells are assigned then the sudoku is already solved
+        if len(emptycells) == 0:
+            return True
 
-            # first reset cell es empty in case of backtracking
-            self.setgridvalue(i, j, 0, True)
+        (i, j) = emptycells[0]
 
+        for value in range(1, self.grid_height + 1):
+            # if we can assign i to the cell or not the cell is matrix[row][col]
             if not self.checkgridvalue(i, j, value):
-                # set the (i, j) cell to n
                 self.setgridvalue(i, j, value)
-                # move empty choice
-                emptycells = emptycells[1:]
-                # start number set
-                n = 1
-            else:
-                # only try next value
-                n += 1
 
-            if n > self.grid_height:  # stop when procesing all numbers
-                return None
+                # backtracking
+                if self.__backtrack(emptycells[1:]):
+                    return True
 
-            # here, the grid is valid but not solved: continue searching
-            self.__backtrack(emptycells, n)
+                # if we can't proceed with this solution reassign the cell
+                self.setgridvalue(i, j, 0, True)
+        return False
 # endregion

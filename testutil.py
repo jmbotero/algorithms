@@ -66,7 +66,7 @@ def loadpuzzlebyname(puzzlename, filename):
 # noinspection SpellCheckingInspection
 def __main_singlepuzzle():
     mypuzzle = loadpuzzlebyname("Lesson 7", "board_sudoku_2.txt")
-    solve(mypuzzle.rows, mypuzzle.boardname)
+    mypuzzle.solve()  # solve(mypuzzle.rows, mypuzzle.boardname)
 
 
 # noinspection SpellCheckingInspection
@@ -76,10 +76,11 @@ def __main():
     start = time.time()
 
     for game in games:
-        solve(game.rows, game.boardname)
+        game.solve()
 
     stop = time.time()
     print(f"Set of puzzles lapse == {round((stop - start) * 1000, 1)} ms")
+
 
 if __name__ == "__main__":
     x = input("1:(test one), 2:(test all) :: ")

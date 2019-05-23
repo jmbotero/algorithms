@@ -189,11 +189,10 @@ def solve(grid, name: str = ""):
         print_grid(solution, grid_name=name, color=color)
         solution = None
     else:
-        print(color.value + f"{name}: Issues with grid" + Color.reset.value)
-
+        print_grid(grid, grid_name=name, color=color)
     stop = time.time()
     print(f"Single puzzle lapse == {round((stop - start) * 1000, 1)} ms")
 
 
 if __name__ == '__main__':
-    solve(grid9)
+    solve(grid3)

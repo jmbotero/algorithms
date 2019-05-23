@@ -1,4 +1,6 @@
-#!/usr/bin/python3
+import time
+
+from sudoku import Color
 
 grid3 = [
     [2, 0, 3],
@@ -14,48 +16,67 @@ grid4 = [
 ]
 
 grid9 = [
-    [0, 7, 0, 2, 5, 0, 4, 0, 0],
-    [8, 0, 0, 0, 0, 0, 9, 0, 3],
-    [0, 0, 0, 0, 0, 3, 0, 7, 0],
-    [7, 0, 0, 0, 0, 4, 0, 2, 0],
-    [1, 0, 0, 0, 0, 0, 0, 0, 7],
-    [0, 4, 0, 5, 0, 0, 0, 0, 8],
-    [0, 9, 0, 6, 0, 0, 0, 0, 0],
-    [4, 0, 1, 0, 0, 0, 0, 0, 5],
-    [0, 0, 7, 0, 8, 2, 0, 3, 0]
+    [0, 0, 0, 0, 0, 0, 6, 8, 0],
+    [0, 0, 0, 0, 7, 3, 0, 0, 9],
+    [3, 0, 9, 0, 0, 0, 0, 4, 5],
+    [4, 9, 0, 0, 0, 0, 0, 0, 0],
+    [8, 0, 3, 0, 5, 0, 9, 0, 2],
+    [0, 0, 0, 0, 0, 0, 0, 3, 6],
+    [9, 6, 0, 0, 0, 0, 3, 0, 8],
+    [7, 0, 0, 6, 8, 0, 0, 0, 0],
+    [0, 2, 8, 0, 0, 0, 0, 0, 0],
 ]
+
 solution = None  # solution grid
 
 # noinspection SpellCheckingInspection
 '''pretty print Sudoku grid'''
 
 
-def print_grid(rows):
-    if rows is not None:
-        for row in rows:
-            print(' '.join([str(x) for x in row if x != 0]))
+def print_grid(rows: object, grid_name: str = "", label: str = None, color=Color.reset):
+    result = ""
+    matrix = ""
+
+    if isinstance(rows, list):
+        grid_height = len(rows)
+        block_height = int(grid_height ** 0.5)
+
+        if block_height * block_height != grid_height:
+            block_height = 0
+
+        for i in range(grid_height):
+            matrix += "\t"
+            for j in range(grid_height):
+                matrix += str(rows[i][j]) + " "
+                if block_height > 0 and (j + 1) % block_height == 0:
+                    matrix += " "
+            matrix += "\n"
+            if block_height > 0 and (i + 1) % block_height == 0:
+                matrix += "\n"
+        if label is None:
+            result = color.value + grid_name + "\n" + matrix + Color.reset.value
+        else:
+            result = color.value + label + "\n" + matrix + Color.reset.value
+
+    print(result)
 
 
-def copy_grid(rows):
-    result = [row[:] for row in rows]
-    return result
+def copy_grid(grid):
+    return [row[:] for row in grid]
 
 
-'''check rows for constraint validity'''
+def check_rows(grid):
+    for row in grid:
+        unique_row_values = set()
 
-
-def check_rows(rows):
-    for row in rows:
-        xs = set()
-
-        for x in row:
-            if x == 0:
+        for value in row:
+            if value == 0:  # skip zeroes
                 continue
 
-            if x in xs:
+            if value in unique_row_values:
                 return False
 
-            xs.add(x)
+            unique_row_values.add(value)
 
     return True
 
@@ -63,36 +84,39 @@ def check_rows(rows):
 '''check columns for constraint validity'''
 
 
-def check_cols(rows):
-    cols = [[row[i] for row in rows] for i in range(n)]
+def check_cols(grid):
+    grid_height = len(grid)
+    cols = [[row[i] for row in grid] for i in range(grid_height)]
 
     return check_rows(cols)
 
 
-'''check sub-grids for constraint validity'''
+'''check blocks for constraint validity'''
 
 
-def check_sub_grids(rows):
-    m = int(n ** 0.5)
+def check_blocks(grid):
+    grid_height = len(grid)
+    block_height = int(grid_height ** 0.5)
 
-    # sub-grids exist for squared grids only
-    if m * m != n:
+    # blocks exist for squared grids only
+    if block_height * block_height != grid_height:
         return True
 
-    for i in range(m):
-        for j in range(m):
-            sub_grid = [row[j * m:(j + 1) * m] for row in rows[i * m:(i + 1) * m]]
-            xs = set()
+    for i in range(block_height):
+        for j in range(block_height):
+            block = [row[j * block_height:(j + 1) * block_height] for row in
+                     grid[i * block_height:(i + 1) * block_height]]
+            unique_block_values = set()
 
-            for row in sub_grid:
-                for x in row:
-                    if x == 0:
+            for row in block:
+                for value in row:
+                    if value == 0:  # skip zeroes
                         continue
 
-                    if x in xs:
+                    if value in unique_block_values:
                         return False
 
-                    xs.add(x)
+                    unique_block_values.add(value)
 
     return True
 
@@ -100,62 +124,76 @@ def check_sub_grids(rows):
 '''check solution grid for goal validity'''
 
 
-def check_solution(rows):
-    return sum([row.count(0) for row in rows]) == 0
+def check_solution(grid):
+    if grid is None or grid == []:
+        return False
+    return sum([row.count(0) for row in grid]) == 0
 
 
-def solve(rows, spots, x):
+def backtrack(grid, spots, x):
     global solution
-    global n
 
-    n = len(rows)
-    solution = []
+    grid_height = len(grid)
 
     # all spots filled: stop searching
     if len(spots) == 0:
-        return None
+        return
 
     # another search solved the grid: stop searching
     if solution is not None:
-        return solution
+        return
 
     # set the (i, j) cell to x
     (i, j) = spots[0]
-    rows[i][j] = x
+    grid[i][j] = x
 
     # the grid is invalid: stop searching
-    is_grid_valid = check_rows(rows) and check_cols(rows) and check_sub_grids(rows)
+    is_grid_valid = check_rows(grid)
+    is_grid_valid = is_grid_valid and check_cols(grid)
+    is_grid_valid = is_grid_valid and check_blocks(grid)
     if not is_grid_valid:
-        return None
+        return
 
     # the grid is valid and solved: stop searching
-    is_grid_solved = check_solution(rows)
+    is_grid_solved = check_solution(grid)
     if is_grid_solved:
-        solution = copy_grid(rows)
-        return rows
+        solution = grid
+        return
 
     # here, the grid is valid but not solved: continue searching
-    for x in range(n):
-        spots1 = spots[1:]  # clone `spots` array starting from 1st index
-        solve(copy_grid(rows), spots1, x + 1)
+    for x in range(1, grid_height + 1):
+        backtrack(copy_grid(grid), spots[1:], x)
 
 
-def main():
+def solve(grid, name: str = ""):
+    global solution
+
+    start = time.time()
+
     # list all spots
     spots = []
-    for i in range(n):
-        for j in range(n):
+    grid_height = len(grid)
+    for i in range(grid_height):
+        for j in range(grid_height):
             if grid[i][j] == 0:
                 spots.append((i, j))
 
-    # solve grid
-    for x in range(n):
-        solve(copy_grid(grid), spots, x + 1)
+    # backtrack grid
+    for x in range(1, grid_height + 1):
+        backtrack(copy_grid(grid), spots, x)
 
-    print_grid(solution)
+    color = Color.red
+    if check_solution(solution):
+        color = Color.green
+    if solution is not None:
+        print_grid(solution, grid_name=name, color=color)
+        solution = None
+    else:
+        print(color.value + f"{name}: Issues with grid" + Color.reset.value)
+
+    stop = time.time()
+    print(f"Single puzzle lapse == {round((stop - start) * 1000, 1)} ms")
 
 
 if __name__ == '__main__':
-    grid = grid9
-    n = len(grid)
-    main()
+    solve(grid9)

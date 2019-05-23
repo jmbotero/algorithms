@@ -10,7 +10,7 @@ class TestSudoku(TestCase):
         actualboard = testutil.loadpuzzlebyname("Case 1:Actual for test set value", "test_board_sudoku.txt")
         expectedboard = testutil.loadpuzzlebyname("Case 1:Expected for test set value", "test_board_sudoku.txt")
 
-        actualboard.setmatrixvalue(1, 3, 5)
+        actualboard.setgridvalue(1, 3, 5)
 
         self.assertEqual(expectedboard.rows, actualboard.rows, msg="There is  difference at the row level")
         self.assertEqual(expectedboard.columns, actualboard.columns, msg="There is  difference at the column level")
@@ -19,8 +19,8 @@ class TestSudoku(TestCase):
         actualboard = testutil.loadpuzzlebyname("Case 2:Actual for test set value", "test_board_sudoku.txt")
         expectedboard = testutil.loadpuzzlebyname("Case 2:Expected for test set value", "test_board_sudoku.txt")
 
-        actualboard.setmatrixvalue(7, 3, 5)
-        actualboard.setmatrixvalue(1, 3, 5)
+        actualboard.setgridvalue(7, 3, 5)
+        actualboard.setgridvalue(1, 3, 5)
 
         self.assertEqual(expectedboard.rows, actualboard.rows, msg="There is  difference at the row level")
         self.assertEqual(expectedboard.columns, actualboard.columns, msg="There is  difference at the column level")
@@ -36,8 +36,8 @@ class TestSudoku(TestCase):
         actualboard = testutil.loadpuzzlebyname(
             "Case 1:Actual for test contains value in intersecting row, column, and block", "test_board_sudoku.txt")
 
-        self.assertTrue(actualboard.sectioncontainsvalue(0, 7, 1))
+        self.assertTrue(actualboard.checkgridvalue(0, 7, 1))
         actualboard = testutil.loadpuzzlebyname(
             "Case 2:Actual for test contains value in intersecting row, column, and block", "test_board_sudoku.txt")
 
-        self.assertFalse(actualboard.sectioncontainsvalue(0, 7, 1))
+        self.assertFalse(actualboard.checkgridvalue(0, 7, 1))

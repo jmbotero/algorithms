@@ -12,6 +12,7 @@
       <option name="ignoredIdentifiers">
         <list>
           <option value="sudoku.Sudoku.__processblockramifications" />
+          <option value="sudoku.Sudoku.isgridcomplete" />
         </list>
       </option>
     </inspection_tool>

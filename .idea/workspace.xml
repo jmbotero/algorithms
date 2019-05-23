@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="AnalysisUIOptions">
-    <option name="SCOPE_TYPE" value="8" />
+    <option name="SCOPE_TYPE" value="3" />
     <option name="CUSTOM_SCOPE_NAME" value="SudokuFiles" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="77451875-551b-4319-b830-afc1f5bfd3f0" name="Default Changelist" comment="fix code review waning on temp file backtrack">
+    <list default="true" id="77451875-551b-4319-b830-afc1f5bfd3f0" name="Default Changelist" comment="Remove sudoku code for manual puzzle solving technique">
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backtrack.py" beforeDir="false" afterPath="$PROJECT_DIR$/backtrack.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sudoku.py" beforeDir="false" afterPath="$PROJECT_DIR$/sudoku.py" afterDir="false" />
@@ -24,8 +25,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sudoku.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="359">
-              <caret line="40" column="2" lean-forward="true" selection-start-line="40" selection-start-column="2" selection-end-line="40" selection-end-column="2" />
+            <state relative-caret-position="19">
+              <caret line="43" column="21" selection-start-line="43" selection-start-column="21" selection-end-line="43" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -33,8 +34,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="478">
-              <caret line="53" column="5" lean-forward="true" selection-start-line="53" selection-start-column="5" selection-end-line="53" selection-end-column="5" />
+            <state relative-caret-position="231">
+              <caret line="136" lean-forward="true" selection-start-line="128" selection-end-line="141" />
             </state>
           </provider>
         </entry>
@@ -42,8 +43,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/backtrack.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="108" column="12" lean-forward="true" selection-start-line="108" selection-start-column="12" selection-end-line="108" selection-end-column="12" />
+            <state relative-caret-position="-224">
+              <caret line="70" column="41" selection-start-line="70" selection-start-column="41" selection-end-line="70" selection-end-column="41" />
+              <folding>
+                <element signature="e#0#24#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -51,8 +55,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test_sudoku.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="759">
-              <caret line="90" selection-start-line="90" selection-end-line="90" />
+            <state relative-caret-position="627">
+              <caret line="35" selection-start-line="35" selection-end-line="35" />
             </state>
           </provider>
         </entry>
@@ -60,8 +64,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/testutil.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="99" column="36" selection-start-line="99" selection-start-column="36" selection-end-line="99" selection-end-column="36" />
+            <state relative-caret-position="269">
+              <caret line="82" selection-start-line="82" selection-end-line="82" />
               <folding>
                 <element signature="e#0#24#0" expanded="true" />
               </folding>
@@ -72,7 +76,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/board_sudoku_2.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
+            <state relative-caret-position="-438">
               <caret line="10" column="8" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="8" />
             </state>
           </provider>
@@ -115,6 +119,8 @@
       <find>indexranges</find>
       <find>board</find>
       <find>grid</find>
+      <find>n</find>
+      <find>sub_grid</find>
     </findStrings>
     <replaceStrings>
       <replace>missing_</replace>
@@ -124,6 +130,8 @@
       <replace>rngs</replace>
       <replace>grid</replace>
       <replace>rows</replace>
+      <replace>grid_height</replace>
+      <replace>block</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -148,9 +156,9 @@
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_2.py" />
         <option value="$PROJECT_DIR$/data/test_board_sudoku.txt" />
         <option value="$PROJECT_DIR$/data/board_sudoku_2.txt" />
-        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py" />
         <option value="$PROJECT_DIR$/test_sudoku.py" />
         <option value="$PROJECT_DIR$/sudoku.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py" />
         <option value="$PROJECT_DIR$/testutil.py" />
         <option value="$PROJECT_DIR$/backtrack.py" />
       </list>
@@ -222,7 +230,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests for test_sudoku.TestSudoku">
+  <component name="RunManager" selected="Python.testutil">
     <configuration name="backtrack" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="algorithms" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -323,11 +331,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.testutil" />
+        <item itemvalue="Python.scratch_1" />
+        <item itemvalue="Python.backtrack" />
         <item itemvalue="Python tests.Unittests for test_sudoku.TestSudoku" />
         <item itemvalue="Python tests.Unittests for test_sudoku.TestSudoku.test_setmatrixvalue" />
-        <item itemvalue="Python.scratch_1" />
-        <item itemvalue="Python.testutil" />
-        <item itemvalue="Python.backtrack" />
       </list>
     </recent_temporary>
   </component>
@@ -398,16 +406,17 @@
       <option name="project" value="LOCAL" />
       <updated>1558374065409</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Remove sudoku code for manual puzzle solving technique">
+      <created>1558387056514</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1558387056514</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_for_test_sudoku_TestSudoku - 2019.05.07 at 17h 35m 26s.xml">
-      <configuration name="Unittests for test_sudoku.TestSudoku" configurationId="tests" />
-    </history-entry>
-    <history-entry file="Unittests_for_test_sudoku_TestSudoku - 2019.05.07 at 17h 35m 31s.xml">
-      <configuration name="Unittests for test_sudoku.TestSudoku" configurationId="tests" />
-    </history-entry>
     <history-entry file="Unittests_for_test_sudoku_TestSudoku - 2019.05.20 at 11h 26m 43s.xml">
       <configuration name="Unittests for test_sudoku.TestSudoku" configurationId="tests" />
     </history-entry>
@@ -432,12 +441,18 @@
     <history-entry file="Unittests_for_test_sudoku_TestSudoku - 2019.05.20 at 16h 25m 01s.xml">
       <configuration name="Unittests for test_sudoku.TestSudoku" configurationId="tests" />
     </history-entry>
+    <history-entry file="Unittests_for_test_sudoku_TestSudoku - 2019.05.20 at 17h 13m 05s.xml">
+      <configuration name="Unittests for test_sudoku.TestSudoku" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_test_sudoku_TestSudoku - 2019.05.20 at 17h 14m 33s.xml">
+      <configuration name="Unittests for test_sudoku.TestSudoku" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="23" width="2486" height="1415" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.53438556" visible="true" weight="0.15294118" />
-      <window_info id="Structure" order="1" sideWeight="0.46561444" side_tool="true" visible="true" weight="0.15294118" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5321308" visible="true" weight="0.15294118" />
+      <window_info id="Structure" order="1" sideWeight="0.46786922" side_tool="true" visible="true" weight="0.15294118" />
       <window_info id="Favorites" order="2" sideWeight="0.46223223" side_tool="true" weight="0.15294118" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3340892" />
@@ -469,7 +484,8 @@
     <MESSAGE value="More code/testutil refactoring and modify sudoku class to load&#10;grids of size different than 9 (only squared grids have blocks" />
     <MESSAGE value="More refactoring and remove shift logic hardcoding" />
     <MESSAGE value="fix code review waning on temp file backtrack" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix code review waning on temp file backtrack" />
+    <MESSAGE value="Remove sudoku code for manual puzzle solving technique" />
+    <option name="LAST_COMMIT_MESSAGE" value="Remove sudoku code for manual puzzle solving technique" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -483,49 +499,24 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/testutil.py</url>
-          <line>87</line>
-          <option name="timeStamp" value="114" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/testutil.py</url>
-          <line>107</line>
-          <option name="timeStamp" value="118" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/testutil.py</url>
-          <line>92</line>
-          <option name="timeStamp" value="121" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/testutil.py</url>
-          <line>115</line>
-          <option name="timeStamp" value="130" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/sudoku.py</url>
-          <line>65</line>
-          <option name="timeStamp" value="132" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/testutil.py</url>
-          <line>105</line>
-          <option name="timeStamp" value="133" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py</url>
-          <line>72</line>
+          <line>75</line>
           <option name="timeStamp" value="134" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/sudoku.py</url>
-          <line>67</line>
-          <option name="timeStamp" value="135" />
+          <url>file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py</url>
+          <line>61</line>
+          <option name="timeStamp" value="137" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py</url>
-          <line>58</line>
-          <option name="timeStamp" value="137" />
+          <url>file://$PROJECT_DIR$/backtrack.py</url>
+          <line>2</line>
+          <option name="timeStamp" value="141" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/backtrack.py</url>
+          <line>147</line>
+          <option name="timeStamp" value="148" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -539,6 +530,7 @@
         <watch expression="mypuzzle.rows" />
         <watch expression="f&quot;coordinate({item}) = {coordinates[item]}&quot;" language="TEXT" />
         <watch expression="f&quot;coordinate({item}) = {coordinates[item]}&quot;" language="TEXT" />
+        <watch expression="solution" />
       </configuration>
     </watches-manager>
   </component>
@@ -667,13 +659,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/board_sudoku_1.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6270">
-          <caret line="330" selection-start-line="321" selection-end-line="330" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/unittest/case.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="284">
@@ -681,48 +666,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py">
+    <entry file="file://$PROJECT_DIR$/test_sudoku.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="478">
-          <caret line="53" column="5" lean-forward="true" selection-start-line="53" selection-start-column="5" selection-end-line="53" selection-end-column="5" />
+        <state relative-caret-position="627">
+          <caret line="35" selection-start-line="35" selection-end-line="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/board_sudoku_1.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6270">
+          <caret line="330" selection-start-line="321" selection-end-line="330" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data/board_sudoku_2.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
+        <state relative-caret-position="-438">
           <caret line="10" column="8" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test_sudoku.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="759">
-          <caret line="90" selection-start-line="90" selection-end-line="90" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sudoku.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="359">
-          <caret line="40" column="2" lean-forward="true" selection-start-line="40" selection-start-column="2" selection-end-line="40" selection-end-column="2" />
+        <state relative-caret-position="19">
+          <caret line="43" column="21" selection-start-line="43" selection-start-column="21" selection-end-line="43" selection-end-column="21" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/testutil.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="99" column="36" selection-start-line="99" selection-start-column="36" selection-end-line="99" selection-end-column="36" />
+        <state relative-caret-position="269">
+          <caret line="82" selection-start-line="82" selection-end-line="82" />
           <folding>
             <element signature="e#0#24#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="136" lean-forward="true" selection-start-line="128" selection-end-line="141" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/backtrack.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="108" column="12" lean-forward="true" selection-start-line="108" selection-start-column="12" selection-end-line="108" selection-end-column="12" />
+        <state relative-caret-position="-224">
+          <caret line="70" column="41" selection-start-line="70" selection-start-column="41" selection-end-line="70" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
